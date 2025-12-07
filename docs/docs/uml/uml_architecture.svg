@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="315px" preserveAspectRatio="none" style="width:725px;height:315px;" version="1.1" viewBox="0 0 725 315" width="725px" zoomAndPan="magnify"><defs><filter height="300%" id="f17wfnxefkb1x8" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="353" x="192" y="19.2419">Architecture globale — Serveur TCP/HTTP</text><!--MD5=[107958bc0bb434429bfb39b6996de105]
+cluster Serveur TCP--><polygon fill="#FFFFFF" filter="url(#f17wfnxefkb1x8)" points="22,93.5158,111,93.5158,118,118.5838,317,118.5838,317,186.5158,22,186.5158,22,93.5158" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="22" x2="118" y1="118.5838" y2="118.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="83" x="26" y="110.4818">Serveur TCP</text><!--MD5=[9015e1545ac0849ea080538bc9498e15]
+cluster Queue FIFO (thread-safe)--><polygon fill="#FFFFFF" filter="url(#f17wfnxefkb1x8)" points="79,210.5158,259,210.5158,266,235.5838,269,235.5838,269,303.5158,79,303.5158,79,210.5158" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="79" x2="266" y1="235.5838" y2="235.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="174" x="83" y="227.4818">Queue FIFO (thread-safe)</text><!--MD5=[73ed7498a38313ed0f88f83966805316]
+cluster Serveur HTTP--><polygon fill="#FFFFFF" filter="url(#f17wfnxefkb1x8)" points="341,93.5158,440,93.5158,447,118.5838,703,118.5838,703,303.5158,341,303.5158,341,93.5158" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="341" x2="447" y1="118.5838" y2="118.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="93" x="345" y="110.4818">Serveur HTTP</text><!--MD5=[6c7085ab01c3ae0d5aba43a82ec3b713]
+entity serveur_mono--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="115" x="185.5" y="131.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180.5" y="136.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180.5" y="160.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="95" x="195.5" y="156.4818">serveur_mono</text><!--MD5=[8188cf7b51d4d56ae79f5bc89a492113]
+entity serveur_multi--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="112" x="38" y="131.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="33" y="136.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="33" y="160.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="92" x="48" y="156.4818">serveur_multi</text><!--MD5=[517fc6b7e33720d1241abd1caddac302]
+entity queue.c--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="74" x="104" y="248.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="99" y="253.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="99" y="277.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="54" x="114" y="273.4818">queue.c</text><!--MD5=[ec09f3997691d4bdb14270f3847fcb0c]
+entity serveur_mono_http--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="149" x="538.5" y="131.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="533.5" y="136.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="533.5" y="160.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="129" x="548.5" y="156.4818">serveur_mono_http</text><!--MD5=[b7b44a2e11de6b14d6c8b0047b5f7bfc]
+entity serveur_multi_http--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="146" x="357" y="131.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="352" y="136.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="352" y="160.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="126" x="367" y="156.4818">serveur_multi_http</text><!--MD5=[353490ce30b760695a83e6dbac70416b]
+entity http.c--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="59" x="491.5" y="248.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="486.5" y="253.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="486.5" y="277.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="39" x="501.5" y="273.4818">http.c</text><!--MD5=[4a65e84059005d12693a083370a06717]
+entity client--><rect fill="#FEFECE" filter="url(#f17wfnxefkb1x8)" height="39.0679" style="stroke: #A80036; stroke-width: 1.5;" width="57" x="139.5" y="32.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="134.5" y="37.5158"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="134.5" y="61.5838"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="37" x="149.5" y="57.4818">client</text><!--MD5=[36e8f01c5eb8c110ec33f45172c6774e]
+link client to serveur_mono--><path d="M182.46,71.7158 C194.7,87.5558 212.3,110.3058 225.36,127.2058 " fill="none" id="client-&gt;serveur_mono" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="228.58,131.3658,226.2431,121.7983,225.5232,127.4091,219.9123,126.6892,228.58,131.3658" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[f65a9672d5f7ee1a38bc0185df4cbc72]
+link client to serveur_multi--><path d="M153.73,71.7158 C141.65,87.5558 124.29,110.3058 111.4,127.2058 " fill="none" id="client-&gt;serveur_multi" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="108.22,131.3658,116.8582,126.6349,111.2519,127.39,110.4968,121.7838,108.22,131.3658" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[014ac92ace058dd16175500417e3ebd6]
+link serveur_multi to queue.c--><path d="M101.66,170.7458 C109.78,190.6258 122.64,222.0858 131.43,243.5958 " fill="none" id="serveur_multi-&gt;queue.c" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="133.35,248.2958,133.6327,238.451,131.4513,243.6704,126.2319,241.489,133.35,248.2958" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[5fa0d63bad09a67f6060bfdd9c345e86]
+link serveur_multi_http to queue.c--><path d="M383.25,170.6158 C327.73,192.7158 235.98,229.2258 182.75,250.4058 " fill="none" id="serveur_multi_http-&gt;queue.c" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="178.04,252.2758,187.8808,252.6734,182.6873,250.4312,184.9294,245.2377,178.04,252.2758" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[c931cc876481c882f29cf09d8251c02b]
+link serveur_mono_http to http.c--><path d="M598.01,170.7458 C581.98,190.7958 556.52,222.6158 539.31,244.1358 " fill="none" id="serveur_mono_http-&gt;http.c" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="535.98,248.2958,544.7217,243.759,539.1,244.3887,538.4703,238.767,535.98,248.2958" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[51bb7c7d1133b429df55dbc4673b47d5]
+link serveur_multi_http to http.c--><path d="M444.82,170.7458 C460.69,190.7958 485.87,222.6158 502.89,244.1358 " fill="none" id="serveur_multi_http-&gt;http.c" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="506.18,248.2958,503.7281,238.7571,503.0758,244.3762,497.4566,243.7239,506.18,248.2958" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[6712b3af645fb5c7defad3084b9a973d]
+@startuml
+title Architecture globale — Serveur TCP/HTTP
+
+package "Serveur TCP" {
+  [serveur_mono] 
+  [serveur_multi]
+}
+
+package "Queue FIFO (thread-safe)" {
+  [queue.c]
+}
+
+package "Serveur HTTP" {
+  [serveur_mono_http]
+  [serveur_multi_http]
+  [http.c]
+}
+
+[client] - -> [serveur_mono]
+[client] - -> [serveur_multi]
+
+[serveur_multi] - -> [queue.c]
+[serveur_multi_http] - -> [queue.c]
+
+[serveur_mono_http] - -> [http.c]
+[serveur_multi_http] - -> [http.c]
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 11:22:07 CET 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.9+10-Ubuntu-124.04
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

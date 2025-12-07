@@ -1,0 +1,29 @@
+@startuml
+title Architecture globale — Serveur TCP/HTTP
+
+package "Serveur TCP" {
+  [serveur_mono] 
+  [serveur_multi]
+}
+
+package "Queue FIFO (thread-safe)" {
+  [queue.c]
+}
+
+package "Serveur HTTP" {
+  [serveur_mono_http]
+  [serveur_multi_http]
+  [http.c]
+}
+
+[client] --> [serveur_mono]
+[client] --> [serveur_multi]
+
+[serveur_multi] --> [queue.c]
+[serveur_multi_http] --> [queue.c]
+
+[serveur_mono_http] --> [http.c]
+[serveur_multi_http] --> [http.c]
+
+@enduml
+

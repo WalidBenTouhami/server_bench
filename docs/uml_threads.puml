@@ -1,0 +1,18 @@
+@startuml
+title Multi-threading — Workers & Dispatcher
+
+actor Client
+
+Client --> Dispatcher : connexion TCP/HTTP
+Dispatcher --> Queue : push(job)
+
+Queue --> Worker1 : pop(job)
+Queue --> Worker2
+Queue --> WorkerN
+
+Worker1 --> Réseau : recv/send
+Worker2 --> Réseau
+WorkerN --> Réseau
+
+@enduml
+

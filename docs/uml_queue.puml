@@ -1,0 +1,18 @@
+@startuml
+title Queue FIFO — Thread-Safe
+
+class queue_t {
+    - capacity : int
+    - buffer : void**
+    - head : int
+    - tail : int
+    - count : int
+    - mutex : pthread_mutex_t
+    - not_empty : pthread_cond_t
+}
+
+queue_t --> pthread_mutex_t : lock/unlock
+queue_t --> pthread_cond_t : wait/signal
+
+@enduml
+
