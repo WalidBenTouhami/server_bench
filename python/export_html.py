@@ -1,65 +1,121 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+export_html.py — Génération du dashboard HTML avec sécurité .format()
+Compatible avec CSS, évite KeyError via double-accolades.
+"""
+
 import json
-import pandas as pd
 from pathlib import Path
-import plotly.express as px
-import plotly.io as pio
 
-BASE_DIR = Path(__file__).resolve().parent
-
-RESULTS_JSON = BASE_DIR / "results.json"
-OUTPUT_HTML = BASE_DIR / "dashboard.html"
-
+ROOT = Path(__file__).resolve().parent
+RESULTS_JSON = ROOT / "results.json"
+OUTPUT_HTML = ROOT / "dashboard.html"
+FIG_DIR = ROOT / "figures"
 
 def load_results():
     if not RESULTS_JSON.exists():
-        raise FileNotFoundError(f"❌ Fichier introuvable : {RESULTS_JSON}")
+        raise FileNotFoundError(f"Fichier introuvable : {RESULTS_JSON}")
 
-    data = json.loads(RESULTS_JSON.read_text())
-    return pd.DataFrame(data)
+    with RESULTS_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data
 
 
-def generate_dashboard(df: pd.DataFrame):
-    html_parts = []
+def build_table(data):
+    if not data:
+        return "<p>Aucune donnée disponible.</p>"
 
-    # ======== TITRE ========
-    html_parts.append("""
-    <h1 style="font-family:Arial; text-align:center;">Dashboard Benchmark</h1>
-    <hr>
-    """)
+    # Récupération des colonnes de la première ligne
+    cols = data[0].keys()
 
-    # ======== TABLEAU ========
-    html_parts.append("<h2>Tableau des résultats</h2>")
-    html_parts.append(df.to_html(index=False, classes="table table-striped"))
+    thead = "".join(f"<th>{c}</th>" for c in cols)
+    rows = []
+    for row in data:
+        tr = "".join(f"<td>{row[c]}</td>" for c in cols)
+        rows.append(f"<tr>{tr}</tr>")
 
-    # ======== PLOT : Débit ========
-    fig1 = px.line(df, x="clients", y="throughput_rps", color="server",
-                   title="Débit (req/s) selon la charge")
-    fig1_html = pio.to_html(fig1, include_plotlyjs="cdn", full_html=False)
-    html_parts.append("<h2>Débit</h2>" + fig1_html)
+    tbody = "\n".join(rows)
 
-    # ======== PLOT : Latence P99 ========
-    fig2 = px.line(df, x="clients", y="p99", color="server",
-                   title="Latence P99 (ms)")
-    fig2_html = pio.to_html(fig2, include_plotlyjs="cdn", full_html=False)
-    html_parts.append("<h2>Latence P99</h2>" + fig2_html)
-
-    # ======== PLOT : CPU ========
-    fig3 = px.line(df, x="clients", y="cpu_mean", color="server",
-                   title="CPU moyen (%)")
-    fig3_html = pio.to_html(fig3, include_plotlyjs="cdn", full_html=False)
-    html_parts.append("<h2>CPU moyen</h2>" + fig3_html)
-
-    # Générer la page HTML complète
-    OUTPUT_HTML.write_text("\n".join(html_parts), encoding="utf-8")
-    print(f"\n✔ Dashboard généré : {OUTPUT_HTML}\n")
+    return f"""
+    <table class="perf-table">
+        <thead><tr>{thead}</tr></thead>
+        <tbody>{tbody}</tbody>
+    </table>
+    """
 
 
 def main():
-    df = load_results()
-    generate_dashboard(df)
+    data = load_results()
+    table_html = build_table(data)
+
+    # ⚠ Toutes les accolades CSS sont doublées {{ }}
+    html = """
+<html>
+<head>
+<title>{title}</title>
+<style>
+body {{
+    font-family: Arial, sans-serif;
+    margin: 2rem;
+    background: #fafafa;
+}}
+h1 {{
+    color: #0d47a1;
+}}
+.perf-table {{
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}}
+.perf-table th {{
+    background: #e3f2fd;
+    padding: 8px;
+    border: 1px solid #ccc;
+}}
+.perf-table td {{
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+}}
+img {{
+    max-width: 600px;
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 4px;
+    margin: 8px;
+}}
+</style>
+</head>
+<body>
+
+<h1>{title}</h1>
+
+<h2>📊 Résultats du benchmark</h2>
+{table}
+
+<h2>📈 Graphiques</h2>
+{images}
+
+</body>
+</html>
+"""
+
+    # 🔍 Récupération des images
+    img_tags = ""
+    if FIG_DIR.exists():
+        for fig in sorted(FIG_DIR.glob("*.png")):
+            img_tags += f'<div><img src="figures/{fig.name}" alt="{fig.name}"></div>\n'
+
+    html_f = html.format(
+        title="Dashboard – Serveur Haute Performance",
+        table=table_html,
+        images=img_tags
+    )
+
+    OUTPUT_HTML.write_text(html_f, encoding="utf-8")
+    print(f"✔ Dashboard HTML généré : {OUTPUT_HTML}")
 
 
 if __name__ == "__main__":

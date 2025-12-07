@@ -1,46 +1,58 @@
-#!/bin/bash
-set -euo pipefail
+#!/usr/bin/env bash
+set -e
 
-# ===========================
-#   Nettoyage des warnings GTK
-# ===========================
-export NO_AT_BRIDGE=1
-export GDK_BACKEND=x11
-export MOZ_ENABLE_WAYLAND=0
-export LIBGL_ALWAYS_INDIRECT=1
+LOG_FILE="logs/dashboard_open.log"
+DASHBOARD_PATH="$(realpath "$(dirname "$0")/../python/dashboard.html")"
 
-PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-HTML_FILE="$PROJECT_ROOT/python/dashboard.html"
-LOG_FILE="$PROJECT_ROOT/logs/dashboard_open.log"
+echo "──────────────────────────────────────────────" | tee -a "$LOG_FILE"
+echo "🌐 Ouverture du Dashboard – $(date)"              | tee -a "$LOG_FILE"
+echo "📄 Fichier : $DASHBOARD_PATH"                    | tee -a "$LOG_FILE"
+echo "──────────────────────────────────────────────" | tee -a "$LOG_FILE"
 
-mkdir -p "$PROJECT_ROOT/logs"
-
-echo "[INFO] Ouverture du dashboard: $HTML_FILE" | tee "$LOG_FILE"
-
-if [ ! -f "$HTML_FILE" ]; then
-    echo "[ERREUR] dashboard.html introuvable. Exécute 'python3 export_html.py' d'abord."
+# Vérification du fichier
+if [[ ! -f "$DASHBOARD_PATH" ]]; then
+    echo "❌ ERREUR : dashboard.html introuvable !" | tee -a "$LOG_FILE"
     exit 1
 fi
 
-# ===========================
-#  Fonction d'ouverture
-# ===========================
-open_html() {
-    if command -v xdg-open >/dev/null; then
-        xdg-open "$1" >> "$LOG_FILE" 2>&1 && exit 0
+# Détection automatique du navigateur
+detect_browser() {
+    if command -v firefox >/dev/null 2>&1; then
+        echo "firefox"
+    elif command -v google-chrome >/dev/null 2>&1; then
+        echo "google-chrome"
+    elif command -v chromium >/dev/null 2>&1; then
+        echo "chromium"
+    elif command -v xdg-open >/dev/null 2>&1; then
+        echo "xdg-open"
+    else
+        echo "none"
     fi
-    if command -v firefox >/dev/null; then
-        firefox "$1" >> "$LOG_FILE" 2>&1 && exit 0
-    fi
-    if command -v chromium-browser >/dev/null; then
-        chromium-browser "$1" >> "$LOG_FILE" 2>&1 && exit 0
-    fi
-    if command -v google-chrome >/dev/null; then
-        google-chrome "$1" >> "$LOG_FILE" 2>&1 && exit 0
-    fi
-    echo "[ERREUR] Impossible d'ouvrir un navigateur." | tee -a "$LOG_FILE"
-    exit 1
 }
 
-open_html "$HTML_FILE"
+BROWSER=$(detect_browser)
+
+echo "🔍 Navigateur détecté : $BROWSER" | tee -a "$LOG_FILE"
+
+if [[ "$BROWSER" == "none" ]]; then
+    echo "⚠️ Aucun navigateur GUI détecté. Tentative en mode terminal…" | tee -a "$LOG_FILE"
+
+    if command -v lynx >/dev/null 2>&1; then
+        echo "📟 Ouverture avec lynx (mode terminal)…" | tee -a "$LOG_FILE"
+        lynx "$DASHBOARD_PATH"
+        exit 0
+    fi
+
+    echo "❌ ERREUR FATALE : aucun navigateur disponible, même pas lynx." | tee -a "$LOG_FILE"
+    echo "💡 Solution : installer un navigateur, ex. : sudo apt install firefox" | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# Lance le dashboard
+echo "🚀 Ouverture du Dashboard avec : $BROWSER" | tee -a "$LOG_FILE"
+
+"$BROWSER" "$DASHBOARD_PATH" >/dev/null 2>&1 &
+
+echo "✔ Dashboard lancé avec succès !" | tee -a "$LOG_FILE"
+echo "──────────────────────────────────────────────" | tee -a "$LOG_FILE"
 

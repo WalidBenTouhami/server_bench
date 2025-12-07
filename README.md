@@ -1,4 +1,4 @@
-```markdown
+````markdown
 # 🚀 Serveur TCP & HTTP Hautes Performances — C/POSIX  
 ### Projet Ingénieur — Multi-threading • Queue FIFO Générique • Benchmarks • Dashboard HTML
 
@@ -31,18 +31,109 @@ Le projet inclut :
 - ✔ File FIFO générique thread-safe (`queue.c`)
 - ✔ Parseur HTTP robuste (`http.c`)
 - ✔ Benchmarks Python (latence, CPU, RAM, RPS)
-- ✔ Dashboard HTML Plotly interactif
-- ✔ Scripts DevOps (run_all, build, clean, monitoring)
-- ✔ Présentation PPTX + script PDF (générés automatiquement)
+- ✔ Dashboard interactif Plotly HTML
+- ✔ Scripts DevOps (run_all, monitoring, auto-rebuild)
+- ✔ Présentation académique PPTX + script PDF
+
+---
+
+# 🛠️ INSTALLATION (INSTALL.md intégré)
+
+## 1️⃣ Prérequis système (Ubuntu / Debian)
+
+```bash
+sudo apt update
+sudo apt install -y build-essential python3 python3-venv python3-pip curl netcat make git
+````
+
+Dépendances Python pour les benchmarks :
+
+```bash
+pip install psutil pandas matplotlib plotly kaleido
+```
+
+---
+
+## 2️⃣ Cloner le projet
+
+```bash
+git clone https://github.com/.../SERVER_BENCH.git
+cd server_project
+```
+
+---
+
+## 3️⃣ Compiler les serveurs C
+
+Mode normal :
+
+```bash
+make clean
+make -j$(nproc)
+```
+
+Mode debug avec sanitizers :
+
+```bash
+make debug
+```
+
+---
+
+## 4️⃣ Installer l’environnement Python
+
+```bash
+cd python
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+## 5️⃣ Lancer un benchmark complet
+
+Depuis la racine du projet :
+
+```bash
+./scripts/run_all.sh
+```
+
+Les résultats seront générés dans :
+
+```
+python/results.json  
+python/results.xlsx  
+python/figures/*.png
+```
+
+Et un Dashboard interactif :
+
+```bash
+python/dashboard.html
+```
+
+---
+
+## 6️⃣ Tester le projet
+
+```bash
+./scripts/run_tests.sh
+```
+
+---
+
+## 7️⃣ Nettoyage complet
+
+```bash
+./scripts/clean_project.sh
+```
 
 ---
 
 # 📂 Arborescence du projet
 
-*(structure automatiquement récupérée du système)*
-
-```
-
+```text
 server_project/
 ├── src/
 │   ├── serveur_mono.c
@@ -58,66 +149,45 @@ server_project/
 │   ├── dashboard.html
 │   ├── results.json / results.xlsx
 │   ├── figures/
-│   │   ├── 1-throughput.png
-│   │   ├── 2-latency_p99.png
-│   │   ├── 3-cpu.png
-│   │   ├── 4-memory.png
-│   │   ├── 5-speedup.png
 │
 ├── presentation/
 │   ├── presentation_finale_serveur.pptx
 │   ├── script_presentation.pdf
 │   └── backgrounds/
 │
-├── tests/
-│   └── test_queue.c
-│
 ├── scripts/
 │   ├── run_all.sh
 │   ├── run_servers.sh
 │   ├── run_tests.sh
 │   ├── clean_project.sh
-│   ├── kill_servers.sh
 │   └── open_dashboard.sh
 │
 └── rebuild_project.py
-
-````
+```
 
 ---
 
 # 🧠 UML — Architecture & Threads
 
-## UML 1 — Architecture globale du système
-*(Place l'image suivante dans : `docs/uml_architecture.png`)*
+## UML 1 — Architecture globale
 
-```markdown
 ![UML Architecture](docs/uml_architecture.png)
-````
-
-## UML 2 — Queue FIFO Thread-Safe
-
-*(Place l'image suivante dans : `docs/uml_queue.png`)*
-
-```markdown
-![UML Queue FIFO](docs/uml_queue.png)
-```
-
-## UML 3 — Multi-threading (Workers & Dispatcher)
-
-*(Place l'image suivante dans : `docs/uml_threads.png`)*
-
-```markdown
-![UML Multi-thread](docs/uml_threads.png)
-```
-
-Je peux te générer les images UML maintenant si tu veux.
 
 ---
 
-# 📊 Résultats de benchmarks (visualisation)
+## UML 2 — Queue FIFO Thread-Safe
 
-Les graphiques générés automatiquement sont affichés dans le README :
+![UML Queue FIFO](docs/uml_queue.png)
+
+---
+
+## UML 3 — Multi-threading (Workers & Dispatcher)
+
+![UML Threads](docs/uml_threads.png)
+
+---
+
+# 📊 Résultats Benchmark (images générées)
 
 ## Throughput (req/s)
 
@@ -127,15 +197,15 @@ Les graphiques générés automatiquement sont affichés dans le README :
 
 ![Latency P99](python/figures/2-latency_p99.png)
 
-## CPU usage
+## CPU Usage
 
-![CPU usage](python/figures/3-cpu.png)
+![CPU](python/figures/3-cpu.png)
 
-## Mémoire utilisée
+## Mémoire
 
 ![Memory](python/figures/4-memory.png)
 
-## Speedup multi-thread vs mono-thread
+## Speedup Multi-thread
 
 ![Speedup](python/figures/5-speedup.png)
 
@@ -143,30 +213,17 @@ Les graphiques générés automatiquement sont affichés dans le README :
 
 # 🧪 Tests unitaires
 
-Exécuter :
-
 ```bash
 make test
 ```
 
-Testé :
-
-* Queue FIFO générique
-* Multi-thread safety
-* Shutdown propre
+* Test FIFO
+* Test multi-thread
+* Tests d’intégrité sur queue
 
 ---
 
-# 🛠️ Compilation & Exécution
-
-## Compiler entièrement
-
-```bash
-make clean
-make -j$(nproc)
-```
-
-## Lancer un serveur :
+# 🛠️ Exécution des serveurs
 
 ```bash
 make run_mono
@@ -175,7 +232,7 @@ make run_mono_http
 make run_multi_http
 ```
 
-## Arrêter tous les serveurs :
+Stopper :
 
 ```bash
 make kill_servers
@@ -183,70 +240,36 @@ make kill_servers
 
 ---
 
-# 📈 Pipeline Benchmark + Dashboard
-
-Exécution complète :
-
-```bash
-./scripts/run_all.sh
-```
-
-Génération du dashboard :
-
-```bash
-python3 python/export_html.py
-xdg-open python/dashboard.html
-```
-
----
-
 # 🎤 Présentation académique
-
-La présentation PPTX + script PDF sont générés dans :
 
 ```
 presentation/presentation_finale_serveur.pptx
 presentation/script_presentation.pdf
 ```
 
+Inclut :
+
+* UML
+* Architecture serveur
+* Expérimentation
+* Analyse des performances
+
 ---
 
-# 👤 **Auteurs — Membres du groupe (ordre officiel)**
+# 👤 **Auteurs — Membres du groupe**
 
-| Membre                 | Rôle principal                                      | Expertise                                           |
-| ---------------------- | --------------------------------------------------- | --------------------------------------------------- |
-| **Walid Ben Touhami**  | Serveur multi-thread TCP + HTTP, Benchmarks, DevOps | Multi-threading, Queue FIFO, Analyse de Performance |
-| **Yassin Ben Aoun**    | Serveur HTTP, Parsing, Implémentation routing       | HTTP 1.1, parsing, robustesse protocolaire          |
-| **Ghada Sakouhi**      | Architecture globale & Queue FIFO générique         | Structures de données, synchronisation, UML         |
-| **Islem Ben Chaabene** | Serveur TCP mono-thread, protocole binaire          | C bas-niveau, sockets TCP, optimisation             |
-
-### Profil global des auteurs :
-
-**Ingénieurs Informatique — Systèmes & Réseaux**
-Expertise :
-• Serveurs C hautes performances
-• Multi-threading / Pthreads
-• Analyse de performances (CPU/RAM/RPS)
-• Benchmarking Python
-• DevOps & automatisation
+| Membre                 | Rôle                                     | Expertise                           |
+| ---------------------- | ---------------------------------------- | ----------------------------------- |
+| **Walid Ben Touhami**  | Serveur multi-thread, Benchmarks, DevOps | Multi-threading, queue, performance |
+| **Yassin Ben Aoun**    | Parsing HTTP, serveurs HTTP              | HTTP 1.1, robustesse protocolaire   |
+| **Ghada Sakouhi**      | Architecture & queue générique           | UML, synchronisation                |
+| **Islem Ben Chaabene** | Serveur TCP mono-thread                  | C bas-niveau, sockets               |
 
 ---
 
 # 📄 Licence
 
-MIT — libre d’usage académique et professionnel.
-
 ```
-
----
-
-# 🎁 **Souhaites-tu que je génère aussi :**
-
-### ✔ les images UML automatiquement ?  
-### ✔ les fichiers PNG de la UML en style "Engineering Blueprint" ?  
-### ✔ la version anglaise du README ?  
-### ✔ un badge GitHub Actions "Build & Test" ?  
-
-Il suffit de dire : **"Génère les images UML"** ou autre.
+MIT License — usage académique et professionnel autorisé
 ```
 

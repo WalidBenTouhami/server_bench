@@ -1,29 +1,50 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-echo "[SERVERS] Lancement serveur_mono (5050) et serveur_multi (5051)"
-
-PROJECT_DIR="$(pwd)"
-MONO="$PROJECT_DIR/serveur_mono"
-MULTI="$PROJECT_DIR/serveur_multi"
-LOG_DIR="$PROJECT_DIR/logs"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BIN_DIR="$ROOT/bin"
+LOG_DIR="$ROOT/logs"
 
 mkdir -p "$LOG_DIR"
 
-if [ ! -x "$MONO" ] || [ ! -x "$MULTI" ]; then
-  echo "[SERVERS] Binaires manquants. Compile d'abord avec 'make all'."
-  exit 1
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+YELLOW="\033[1;33m"
+BLUE="\033[1;34m"
+RESET="\033[0m"
+
+port_in_use() {
+  local port="$1"
+  if command -v ss >/dev/null 2>&1; then
+    ss -ltn "sport = :$port" | awk 'NR>1 {exit 0} END {exit 1}'
+  else
+    netstat -lnt 2>/dev/null | grep -q ":$port"
+  fi
+}
+
+echo -e "${BLUE}🚀 Lancement des serveurs TCP (mono + multi)…${RESET}"
+
+for port in 5050 5051; do
+  if port_in_use "$port"; then
+    echo -e "${RED}❌ Port $port déjà utilisé. Arrête d'abord les serveurs (scripts/kill_servers.sh).${RESET}"
+    exit 1
+  fi
+done
+
+MONO_BIN="$BIN_DIR/serveur_mono"
+MULTI_BIN="$BIN_DIR/serveur_multi"
+
+if [[ ! -x "$MONO_BIN" || ! -x "$MULTI_BIN" ]]; then
+  echo -e "${YELLOW}⚠️ Binaires manquants. Compilation…${RESET}"
+  (cd "$ROOT" && make -j"$(nproc)")
 fi
 
-"$MONO" > "$LOG_DIR/mono.log" 2>&1 &
+"$MONO_BIN"  >"$LOG_DIR/serveur_mono.log" 2>&1 &
 PID_MONO=$!
-"$MULTI" > "$LOG_DIR/multi.log" 2>&1 &
+"$MULTI_BIN" >"$LOG_DIR/serveur_multi.log" 2>&1 &
 PID_MULTI=$!
 
-echo "[SERVERS] PID mono  = $PID_MONO"
-echo "[SERVERS] PID multi = $PID_MULTI"
-echo "[SERVERS] Ctrl+C pour arrêter."
+echo -e "${GREEN}✔ serveur_mono  (port 5050) PID = ${PID_MONO}${RESET}"
+echo -e "${GREEN}✔ serveur_multi (port 5051) PID = ${PID_MULTI}${RESET}"
+echo -e "${BLUE}ℹ️  Utilise 'scripts/kill_servers.sh' pour les arrêter.${RESET}"
 
-trap "echo '[SERVERS] Arrêt'; kill $PID_MONO $PID_MULTI 2>/dev/null || true; exit 0" SIGINT
-
-while true; do sleep 1; done

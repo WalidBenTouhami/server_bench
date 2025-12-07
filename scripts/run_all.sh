@@ -1,117 +1,58 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-###############################################################################
-#                 RUN_ALL.SH — VERSION PRO / BULLET-PROOF
-#    Auto-détection du projet, logs, redémarrage serveur, monitoring
-###############################################################################
-
-# ============================
-# 🔍 AUTO-DÉTECTION RACINE
-# ============================
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-PYTHON_DIR="$PROJECT_ROOT/python"
-LOG_DIR="$PROJECT_ROOT/logs"
-MONITOR_LOG="$LOG_DIR/monitoring.log"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOG_DIR="$ROOT/logs"
+PY_DIR="$ROOT/python"
 
 mkdir -p "$LOG_DIR"
 
-echo "[RUN_ALL] Racine détectée : $PROJECT_ROOT"
-echo "[RUN_ALL] Logs dans : $LOG_DIR"
-sleep 0.5
+exec > >(tee -a "$LOG_DIR/auto_run.log") 2>&1
 
-# ============================
-# 🧹 NETTOYAGE + BUILD C
-# ============================
-echo "[RUN_ALL] Compilation C…"
-(make -C "$PROJECT_ROOT" clean && make -C "$PROJECT_ROOT" all -j$(nproc)) \
-    > "$LOG_DIR/build.log" 2>&1 || {
-    echo "❌ ERREUR BUILD — voir $LOG_DIR/build.log"
-    exit 1
-}
-echo "✔ Build OK"
+GREEN="\033[1;32m"
+BLUE="\033[1;34m"
+YELLOW="\033[1;33m"
+RED="\033[1;31m"
+RESET="\033[0m"
 
-# ============================
-# 🐍 ENV PYTHON
-# ============================
-echo "[RUN_ALL] Activation environnement Python…"
-cd "$PYTHON_DIR"
-if [ ! -d venv ]; then
-    python3 -m venv venv
+echo "──────────────────────────────────────────────"
+echo -e "🚀 Pipeline complet – $(date)"
+echo "Racine du projet : $ROOT"
+echo "──────────────────────────────────────────────"
+
+# 1) Compilation C
+echo -e "${BLUE}🧱 Compilation des serveurs C…${RESET}"
+(cd "$ROOT" && make clean && make -j"$(nproc)")
+echo -e "${GREEN}✔ Compilation terminée.${RESET}"
+
+# 2) Environnement Python (dans python/)
+echo -e "${BLUE}📦 Environnement Python (python/venv)…${RESET}"
+cd "$PY_DIR"
+if [[ ! -d venv ]]; then
+  python3 -m venv venv
 fi
-
+# shellcheck disable=SC1091
 source venv/bin/activate
-pip install -r requirements.txt > "$LOG_DIR/pip_install.log" 2>&1
+pip install --upgrade pip >/dev/null
+pip install -r requirements.txt >/dev/null
+echo -e "${GREEN}✔ Environnement Python prêt.${RESET}"
 
-# ============================
-# 🔄 MONITORING CPU/RAM (background)
-# ============================
-monitor_system() {
-    echo "[MONITOR] Démarrage monitoring CPU/RAM" > "$MONITOR_LOG"
-    while true; do
-        ts=$(date "+%Y-%m-%d %H:%M:%S")
-        cpu=$(grep 'cpu ' /proc/stat | awk '{u=$2+$4; t=$2+$4+$5; if (prev_total!="") printf "%.2f\n",100*( (u-prev_idle)/(t-prev_total) ); prev_idle=$5; prev_total=t}')
-        mem=$(free -m | awk '/Mem:/ {print $3"/"$2" MB"}')
-        echo "$ts  CPU=${cpu}%  MEM=${mem}" >> "$MONITOR_LOG"
-        sleep 2
-    done
-}
+# 3) Benchmark
+echo -e "${BLUE}🔥 Exécution du benchmark complet…${RESET}"
+python3 benchmark.py
+echo -e "${GREEN}✔ Benchmark terminé.${RESET}"
 
-monitor_system &
-PID_MONITOR=$!
-echo "[RUN_ALL] Monitoring PID = $PID_MONITOR"
+# 4) Graphiques
+echo -e "${BLUE}📈 Génération des graphiques PNG + SVG…${RESET}"
+python3 plot_results.py
+echo -e "${GREEN}✔ Graphiques générés dans python/figures/.${RESET}"
 
-# ============================
-# 🚀 LANCEMENT SERVEUR AVEC SURVEILLANCE
-# ============================
-launch_server_supervised() {
-    local bin_path="$1"
-    local port="$2"
-    local log_file="$3"
+# 5) Dashboard HTML
+echo -e "${BLUE}🧩 Génération du dashboard HTML…${RESET}"
+python3 export_html.py
+echo -e "${GREEN}✔ Dashboard : python/dashboard.html${RESET}"
 
-    echo "[SUPERVISOR] Lancement serveur : $bin_path (port $port)"
-    while true; do
-        "$bin_path" >> "$log_file" 2>&1 &
-        local pid=$!
-
-        echo "[SUPERVISOR] PID serveur = $pid"
-        wait $pid
-
-        echo "⚠ Serveur crashé ou arrêté — redémarrage automatique dans 2s…" | tee -a "$log_file"
-        sleep 2
-    done
-}
-
-# ============================
-# 🧪 BENCHMARK AVEC SUPERVISION AUTO
-# ============================
-echo "[RUN_ALL] Benchmark…"
-
-# On lance benchmark en mode superviseur “safe”
-python3 benchmark.py > "$LOG_DIR/benchmark.log" 2>&1 || {
-    echo "❌ ERREUR BENCHMARK — voir $LOG_DIR/benchmark.log"
-    kill $PID_MONITOR
-    exit 1
-}
-
-echo "✔ Benchmark OK"
-
-# ============================
-# 📊 GRAPHIQUES
-# ============================
-echo "[RUN_ALL] Génération graphiques…"
-python3 plot_results.py > "$LOG_DIR/plots.log" 2>&1
-echo "✔ Graphiques OK"
-
-# ============================
-# 🧹 ARRÊT DES SERVICES & MONITORING
-# ============================
-echo "[RUN_ALL] Nettoyage des superviseurs…"
-kill $PID_MONITOR 2>/dev/null || true
-
-echo "🎉 Pipeline complet terminé avec succès."
-echo "📦 Logs : $LOG_DIR"
-echo "📊 Résultats : python/results.json — python/results.xlsx"
-echo "🖼 Figures : python/figures/"
+echo "──────────────────────────────────────────────"
+echo -e "${GREEN}🎉 Pipeline complet terminé sans erreur.${RESET}"
+echo "──────────────────────────────────────────────"
 

@@ -1,22 +1,39 @@
-#!/bin/bash
-echo "[KILL] Fermeture des serveurs…"
+#!/usr/bin/env bash
+set -euo pipefail
 
-pkill -f serveur_mono     2>/dev/null
-pkill -f serveur_multi    2>/dev/null
-pkill -f serveur_mono_http 2>/dev/null
-pkill -f serveur_multi_http 2>/dev/null
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
 
-sleep 0.5
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+RESET="\033[0m"
 
-# Vérifie si des ports sont encore occupés
-for PORT in 5050 5051 8080 8081; do
-    if sudo lsof -i :$PORT > /dev/null 2>&1; then
-        echo "[WARN] Port $PORT encore utilisé !"
-        PID=$(sudo lsof -t -i :$PORT)
-        echo "       → kill -9 $PID"
-        sudo kill -9 $PID
+echo -e "${RED}⏹  Arrêt des serveurs…${RESET}"
+
+kill_by_name() {
+  local name="$1"
+  if pgrep -x "$name" >/dev/null 2>&1; then
+    echo -e "${YELLOW}→ killall $name${RESET}"
+    pkill -x "$name" || true
+  fi
+}
+
+kill_by_name "serveur_mono"
+kill_by_name "serveur_multi"
+kill_by_name "serveur_mono_http"
+kill_by_name "serveur_multi_http"
+
+# Sécurité supplémentaire : tuer les process écoutant sur 5050/5051
+if command -v fuser >/dev/null 2>&1; then
+  for port in 5050 5051; do
+    if fuser -v "$port"/tcp >/dev/null 2>&1; then
+      echo -e "${YELLOW}→ fuser -k $port/tcp${RESET}"
+      fuser -k "$port"/tcp || true
     fi
-done
+  done
+fi
 
-echo "[OK] Tous les serveurs sont arrêtés et ports libérés."
+echo -e "${GREEN}✔ Tous les serveurs connus ont été arrêtés.${RESET}"
 

@@ -20,8 +20,8 @@ def envoyer_requete(host: str, port: int, number: int) -> float:
             ts_raw = s.recv(8)
             if len(result_raw) < 4 or len(ts_raw) < 8:
                 return -1.0
-            _result = struct.unpack("!i", result_raw)[0]
-            _ts = struct.unpack("!q", ts_raw)[0]
+            _ = struct.unpack("!i", result_raw)[0]
+            _ = struct.unpack("!q", ts_raw)[0]
     except Exception:
         return -1.0
     end = time.perf_counter()
@@ -37,12 +37,14 @@ def lancer_stress_test(host: str, port: int, clients: int, number: int = 42):
             lat = f.result()
             if lat >= 0:
                 latences.append(lat)
+
     if not latences:
         return {
             "clients": clients, "success": 0, "fail": clients,
             "mean": None, "median": None, "p95": None, "p99": None,
-            "max": None, "latences": []
+            "max": None, "latences": [],
         }
+
     latences_sorted = sorted(latences)
     n = len(latences_sorted)
 
@@ -67,11 +69,13 @@ def lancer_stress_test(host: str, port: int, clients: int, number: int = 42):
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Client de stress TCP")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--clients", type=int, default=50)
     args = parser.parse_args()
+
     print(f"[CLIENT] {args.clients} connexions vers {args.host}:{args.port}")
     res = lancer_stress_test(args.host, args.port, args.clients)
     print(res)
@@ -79,3 +83,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

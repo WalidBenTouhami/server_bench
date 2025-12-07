@@ -1,17 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-echo "[CLEAN] Nettoyage complet du projet"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-PROJECT_DIR="$(pwd)"
+echo "🧹 Nettoyage complet du projet…"
 
-rm -f "$PROJECT_DIR/serveur_mono" "$PROJECT_DIR/serveur_multi" "$PROJECT_DIR/test_queue"
-rm -f "$PROJECT_DIR"/src/*.o "$PROJECT_DIR"/tests/*.o
+rm -rf "$ROOT/bin" "$ROOT/build"
+rm -rf "$ROOT/logs"
+rm -rf "$ROOT/python/figures"
+rm -f  "$ROOT/python/results.json" "$ROOT/python/results.xlsx"
+rm -f  "$ROOT/python/dashboard.html"
 
-rm -rf "$PROJECT_DIR/python/venv"
-rm -f "$PROJECT_DIR/python/results.json" "$PROJECT_DIR/python/results.xlsx"
-rm -rf "$PROJECT_DIR/python/figures"
+echo "✔ Nettoyage terminé."
 
-rm -rf "$PROJECT_DIR/logs"
-
-echo "[CLEAN] OK"

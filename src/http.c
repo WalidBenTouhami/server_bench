@@ -20,7 +20,7 @@ void parse_http_request(const char *req, char *method, char *path, char *query) 
     }
 
     char url[512] = {0};
-    sscanf(line, "%s %s", method, url);
+    sscanf(line, "%15s %511s", method, url);
 
     char *qmark = strchr(url, '?');
     if (qmark) {
@@ -33,17 +33,20 @@ void parse_http_request(const char *req, char *method, char *path, char *query) 
     strcpy(path, url);
 }
 
-void send_http_response(int client_fd, const char *content_type, const char *body) {
+void send_http_response(int client_fd, const char *status,
+                        const char *content_type, const char *body) {
     char header[4096];
+    size_t body_len = strlen(body);
 
     snprintf(header, sizeof(header),
-        "HTTP/1.1 200 OK\r\n"
+        "HTTP/1.1 %s\r\n"
         "Content-Type: %s\r\n"
-        "Content-Length: %ld\r\n"
-        "Connection: close\r\n\r\n",
-        content_type, (long)strlen(body)
+        "Content-Length: %zu\r\n"
+        "Connection: close\r\n"
+        "\r\n",
+        status, content_type, body_len
     );
 
     send(client_fd, header, strlen(header), 0);
-    send(client_fd, body, strlen(body), 0);
+    send(client_fd, body, body_len, 0);
 }

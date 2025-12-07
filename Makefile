@@ -30,6 +30,10 @@ TARGETS := \
     $(BIN_DIR)/serveur_multi_http \
     $(BIN_DIR)/test_queue
 
+HTTP_TARGETS := \
+    $(BIN_DIR)/serveur_mono_http \
+    $(BIN_DIR)/serveur_multi_http
+
 # Tests unitaires
 TEST_OBJ := $(TEST_DIR)/test_queue.o $(BUILD_DIR)/queue.o
 
@@ -80,7 +84,7 @@ $(BIN_DIR)/test_queue: $(TEST_OBJ)
 ###############################################################################
 #                  RÈGLE GÉNÉRIQUE : .c → .o (src/)
 ###############################################################################
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | prep
 	@echo "$(YELLOW)[CC] $<$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -96,7 +100,11 @@ $(TEST_DIR)/%.o: $(TEST_DIR)/%.c
 ###############################################################################
 .PHONY: debug
 debug: CFLAGS += $(DBGFLAGS)
-debug: clean all
+debug:
+	@echo "$(YELLOW)[DEBUG] Rebuild complet avec sanitizers (ASan + UBSan)$(RESET)"
+	@$(MAKE) clean
+	@$(MAKE) prep
+	@$(MAKE) $(TARGETS)
 	@echo "$(GREEN)[DEBUG MODE ACTIVÉ – ASan + UBSan]$(RESET)"
 
 ###############################################################################
@@ -110,19 +118,27 @@ test: prep $(BIN_DIR)/test_queue
 ###############################################################################
 #                       COMMANDES D’EXÉCUTION RAPIDE
 ###############################################################################
-.PHONY: run_mono run_multi run_mono_http run_multi_http kill_servers
+.PHONY: run_mono run_multi run_mono_http run_multi_http http kill_servers
 
 run_mono: $(BIN_DIR)/serveur_mono
-	$(BIN_DIR)/serveur_mono &
+	@echo "$(BLUE)[RUN] serveur_mono sur port 5050$(RESET)"
+	@$(BIN_DIR)/serveur_mono &
 
 run_multi: $(BIN_DIR)/serveur_multi
-	$(BIN_DIR)/serveur_multi &
+	@echo "$(BLUE)[RUN] serveur_multi sur port 5051 (TCP)$(RESET)"
+	@$(BIN_DIR)/serveur_multi &
 
 run_mono_http: $(BIN_DIR)/serveur_mono_http
-	$(BIN_DIR)/serveur_mono_http &
+	@echo "$(BLUE)[RUN] serveur_mono_http sur port 5050 (HTTP)$(RESET)"
+	@$(BIN_DIR)/serveur_mono_http &
 
 run_multi_http: $(BIN_DIR)/serveur_multi_http
-	$(BIN_DIR)/serveur_multi_http &
+	@echo "$(BLUE)[RUN] serveur_multi_http sur port 5051 (HTTP)$(RESET)"
+	@$(BIN_DIR)/serveur_multi_http &
+
+# Build uniquement les serveurs HTTP
+http: prep $(HTTP_TARGETS)
+	@echo "$(GREEN)[OK] Serveurs HTTP compilés (mono + multi).$(RESET)"
 
 kill_servers:
 	@echo "$(RED)→ Arrêt des serveurs...$(RESET)"
@@ -136,14 +152,18 @@ kill_servers:
 ###############################################################################
 .PHONY: clean
 clean:
-	@echo "$(RED)[CLEAN] Suppression build/ et bin/$(RESET)"
+	@echo "$(RED)[CLEAN] Suppression build/ et bin/ + objets de test$(RESET)"
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -f $(TEST_DIR)/*.o
 
-
-
+###############################################################################
+#                                   REBUILD
+###############################################################################
 .PHONY: rebuild
 rebuild:
-	make clean
-	python3 create_http_files.py
-	make -j$(nproc)
+	@echo "$(YELLOW)[REBUILD] Régénération des fichiers HTTP + recompilation complète$(RESET)"
+	@$(MAKE) clean
+	@python3 create_http_files.py
+	@$(MAKE) -j$$(nproc)
+	@echo "$(GREEN)[REBUILD] Projet reconstruit avec succès.$(RESET)"
 
