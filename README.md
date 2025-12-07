@@ -382,12 +382,14 @@ server_project/
 
 ![UML Multi-thread](docs/docs/uml/uml_threads.png)
 
-### Versions SVG (optionnel — plus propre pour LaTeX et zoom HD)
+### Versions SVG (zoom HD / LaTeX friendly)
 
-```html
 <img src="docs/docs/uml/uml_architecture.svg" width="600">
+
 <img src="docs/docs/uml/uml_queue.svg" width="600">
+
 <img src="docs/docs/uml/uml_threads.svg" width="600">
+
 
 ---
 
