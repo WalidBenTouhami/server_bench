@@ -368,19 +368,26 @@ server_project/
 
 ## UML 1 — Architecture globale
 
-![UML Architecture](docs/uml/uml_architecture.png)
+![UML Architecture](docs/docs/uml/uml_architecture.png)
 
 ---
 
 ## UML 2 — Queue FIFO Thread-Safe
 
-![UML Queue FIFO](docs/uml/uml_queue.png)
+![UML Queue FIFO](docs/docs/uml/uml_queue.png)
 
 ---
 
 ## UML 3 — Multi-threading (Workers & Dispatcher)
 
-![UML Threads](docs/uml/uml_threads.png)
+![UML Multi-thread](docs/docs/uml/uml_threads.png)
+
+### Versions SVG (optionnel — plus propre pour LaTeX et zoom HD)
+
+```html
+<img src="docs/docs/uml/uml_architecture.svg" width="600">
+<img src="docs/docs/uml/uml_queue.svg" width="600">
+<img src="docs/docs/uml/uml_threads.svg" width="600">
 
 ---
 
