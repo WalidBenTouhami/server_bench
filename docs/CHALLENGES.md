@@ -261,7 +261,7 @@ Dans `serveur_multi.c`, chaque connexion client nécessite l'allocation dynamiqu
 4. Worker thread : utilise `*fd_ptr` mais **oublie de free(fd_ptr)** ❌
 5. Répété pour chaque connexion → fuite de 8 bytes par connexion
 
-**Code problématique (avant correction) :**
+**Code problématique (exemple simplifié illustrant la fuite) :**
 ```c
 // ❌ Main thread : allocation
 int *fd_ptr = (int*)malloc(sizeof(int));
@@ -282,6 +282,8 @@ static void *worker_func(void *arg) {
     return NULL;
 }
 ```
+
+> 📝 **Note** : Cet exemple est simplifié pour illustrer la fuite. Le code actuel inclut la correction avec `free(fd_ptr)` et une gestion plus robuste du shutdown.
 
 ### Détection avec Valgrind
 
@@ -377,9 +379,11 @@ $ watch -n 5 'ps aux | grep serveur_multi | grep -v grep | awk "{print \$6}"'
 
 ## 4. ⚡ Saturation sous Forte Charge
 
+> 📝 **Note documentaire** : Cette section décrit le processus d'optimisation réalisé. Les valeurs actuelles du code reflètent l'état **après optimisation** (BACKLOG=50, QUEUE_CAPACITY=128 dans serveur_multi.c).
+
 ### Problème Initial
 
-Lors des tests avec 500+ clients simultanés, le serveur commence à rejeter des connexions avec l'erreur `accept(): Resource temporarily unavailable (EAGAIN)`.
+Lors des tests avec 500+ clients simultanés, le serveur commençait à rejeter des connexions avec l'erreur `accept(): Resource temporarily unavailable (EAGAIN)`.
 
 **Symptômes observés :**
 - `accept()` retourne -1 avec errno = EAGAIN/EWOULDBLOCK
@@ -404,15 +408,16 @@ Deux goulots d'étranglement identifiés :
 1. **BACKLOG trop petit** : Limite la taille de la file d'attente TCP du kernel
 2. **QUEUE_CAPACITY insuffisante** : Limite le nombre de connexions en attente de traitement
 
-**Configuration initiale (`serveur_multi.c`) :**
+**Configuration initiale (avant optimisation) :**
 ```c
+// Version initiale qui causait des problèmes
 #define BACKLOG 10          // ❌ File d'attente TCP trop petite
 #define QUEUE_CAPACITY 64   // ❌ Queue applicative limitée
 ```
 
-**Comparaison avec serveur mono-thread :**
+**Comparaison avec serveur mono-thread (avant optimisation) :**
 ```c
-// serveur_mono.c
+// serveur_mono.c - version initiale
 #define BACKLOG 10          // ❌ Même problème mais moins visible
 ```
 
@@ -420,13 +425,13 @@ Deux goulots d'étranglement identifiés :
 
 Augmentation des deux paramètres après analyse de la charge cible :
 
-**Modifications dans `src/serveur_multi.c` :**
+**Modifications appliquées dans `src/serveur_multi.c` :**
 
 ```c
 #define PORT 5051
-#define BACKLOG 50          // ✅ Augmenté : 10 → 50
+#define BACKLOG 50          // ✅ Augmenté : 10 → 50 (état actuel du code)
 #define WORKER_COUNT 8
-#define QUEUE_CAPACITY 128  // ✅ Augmenté : 64 → 128
+#define QUEUE_CAPACITY 128  // ✅ Augmenté : 64 → 128 (état actuel du code)
 ```
 
 **Justification des valeurs :**
@@ -457,13 +462,13 @@ P99 latency: 450ms
 
 ### Impact Serveur Mono-thread
 
-Même amélioration appliquée dans `src/serveur_mono.c` :
+Le serveur mono-thread conserve actuellement sa configuration d'origine dans `src/serveur_mono.c` :
 ```c
 #define PORT 5050
-#define BACKLOG 10  // ✅ Pourrait être augmenté à 50
+#define BACKLOG 10  // État actuel - pourrait être augmenté à 50
 ```
 
-> ⚠️ Note : Le serveur mono-thread reste limité par sa nature séquentielle. L'augmentation du BACKLOG aide mais ne résout pas le problème fondamental de traitement séquentiel.
+> ⚠️ Note : Le serveur mono-thread reste limité par sa nature séquentielle. L'augmentation du BACKLOG aiderait lors des pics de connexions, mais ne résout pas le problème fondamental de traitement séquentiel. L'optimisation du BACKLOG est donc moins prioritaire pour ce serveur.
 
 ---
 
