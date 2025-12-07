@@ -36,7 +36,7 @@ void *queue_pop_unsafe(queue_t *q) {
 
 Utilisation de **mutex (pthread_mutex_t)** et de **variables conditionnelles (pthread_cond_t)** pour garantir l'exclusion mutuelle et la synchronisation entre threads.
 
-**Implémentation dans `src/queue.c` :**
+**Implémentation dans `src/queue.c` (lignes 49-76) :**
 
 ```c
 // ✅ APRÈS : Protection par mutex
@@ -311,7 +311,7 @@ $ valgrind --leak-check=full --show-leak-kinds=all ./bin/serveur_multi
 
 Ajout systématique de `free(fd_ptr)` dans `worker_func()` immédiatement après extraction de la valeur.
 
-**Code corrigé dans `src/serveur_multi.c` :**
+**Code corrigé dans `src/serveur_multi.c` (lignes 143-165) :**
 
 ```c
 // ✅ Main thread : allocation (inchangé)
@@ -339,7 +339,7 @@ static void *worker_func(void *arg) {
             else continue;
         }
         int client_fd = *fd_ptr;
-        free(fd_ptr);  // ✅ CORRECTION : Libération immédiate
+        free(fd_ptr);  // ✅ CORRECTION : Libération immédiate (ligne 65)
         
         // ... traitement du client ...
         close(client_fd);
