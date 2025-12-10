@@ -2,63 +2,135 @@
 # -*- coding: utf-8 -*-
 
 """
-Génération UML + normalisation des noms selon conventions :
-  uml_seq_tcp_monothread
-  uml_seq_tcp_multithread
-  uml_seq_http_monothread
-  uml_seq_http_multithread
-
-Produit automatiquement :
- - .puml
- - .svg (Light)
- - _dark.svg (Dark theme)
-
-Ce script fait partie du workflow Makefile.
+GENERATE UML — NINJA PRO VERSION
+--------------------------------
+✔ Nomenclature auto : tcp_monothread / tcp_multithread / http_monothread / http_multithread
+✔ Génération PUML + SVG Light
+✔ Génération SVG Dark via thème PlantUML (!theme cyborg)
+✔ Nettoyage fichiers obsolètes
+✔ Idempotent et robuste
 """
 
-import os
 import subprocess
 from pathlib import Path
-import re
+import shutil
 
-UML_DIR = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent
+UML_DIR = ROOT
+PROJECT_ROOT = ROOT.parent.parent
 
-# ---------------------------------------------------------------------------
-# Cartographie PUML → contenu
-# ---------------------------------------------------------------------------
-UML_DEFINITIONS = {
-    "uml_seq_tcp_monothread": r"""
+# ============================================
+# RÈGLES DE NOMMAGE OFFICIELLES
+# ============================================
+UML_FILES = {
+    "tcp_monothread": "uml_seq_tcp_monothread.puml",
+    "tcp_multithread": "uml_seq_tcp_multithread.puml",
+    "http_monothread": "uml_seq_http_monothread.puml",
+    "http_multithread": "uml_seq_http_multithread.puml",
+}
+
+# ============================================
+# UTIL : STYLE LOG
+# ============================================
+def log(info):
+    print(f"⚡ {info}")
+
+def warn(info):
+    print(f"⚠️  {info}")
+
+def ok(info):
+    print(f"✔ {info}")
+
+def err(info):
+    print(f"❌ {info}")
+
+# ============================================
+# CLEAN : suppression anciens UML
+# ============================================
+def cleanup_old_files():
+    log("Nettoyage anciens fichiers UML…")
+    for f in UML_DIR.iterdir():
+        if (
+            f.name.startswith("uml_seq")
+            and not f.name.endswith(".puml")
+            and not f.name.endswith("_dark.svg")
+        ):
+            ok(f"Suppression : {f.name}")
+            f.unlink()
+
+# ============================================
+# GÉNÉRATION SVG LIGHT + DARK
+# ============================================
+def generate_svg(puml: Path):
+    base = puml.stem
+    svg_light = UML_DIR / f"{base}.svg"
+    svg_dark = UML_DIR / f"{base}_dark.svg"
+
+    # --- SVG Light ---
+    log(f"Génération SVG Light : {svg_light.name}")
+    subprocess.run(["plantuml", "-tsvg", puml], cwd=UML_DIR)
+
+    if not svg_light.exists():
+        err(f"Échec génération Light : {svg_light.name}")
+        return
+
+    # --- SVG Dark ---
+    dark_puml = UML_DIR / f"{base}_dark_temp.puml"
+    dark_puml.write_text("!theme cyborg\n" + puml.read_text())
+
+    log(f"Génération SVG Dark : {svg_dark.name}")
+    subprocess.run(["plantuml", "-tsvg", dark_puml], cwd=UML_DIR)
+
+    dark_temp_svg = UML_DIR / f"{base}_dark_temp.svg"
+    if dark_temp_svg.exists():
+        dark_temp_svg.rename(svg_dark)
+        ok(f"SVG Dark : {svg_dark.name}")
+    else:
+        warn("SVG Dark non généré.")
+
+    dark_puml.unlink(missing_ok=True)
+
+# ============================================
+# GÉNÉRATION PUML
+# ============================================
+def generate_puml():
+    for key, filename in UML_FILES.items():
+        puml_path = UML_DIR / filename
+
+        content = ""
+        if "tcp_monothread" in key:
+            content = """
 @startuml
 actor Client
-Client -> Server : TCP connect()
-Server -> Server : handle_request()
-Server -> Client : response()
+Client -> Server : CONNECT TCP
+Server -> Server : traitement()
+Server --> Client : réponse
 @enduml
-""",
+            """
 
-    "uml_seq_tcp_multithread": r"""
+        elif "tcp_multithread" in key:
+            content = """
 @startuml
 actor Client
-Client -> Dispatcher : TCP connect()
+Client -> Dispatcher : CONNECT
 Dispatcher -> Queue : push(job)
 Worker -> Queue : pop(job)
-Worker -> Worker : process()
-Worker -> Client : response()
+Worker -> Client : réponse
 @enduml
-""",
+            """
 
-    "uml_seq_http_monothread": r"""
+        elif "http_monothread" in key:
+            content = """
 @startuml
 actor Browser
-Browser -> Server : GET /path
-Server -> Parser : parse_http_request()
-Parser -> Router : route()
-Router -> Server : build_response()
+Browser -> Server : GET /index
+Server -> Server : parse_http()
 Server -> Browser : HTTP/1.1 200 OK
 @enduml
-""",
+            """
 
-    "uml_seq_http_multithread": r"""
+        elif "http_multithread" in key:
+            content = """
 @startuml
 actor Browser
 Browser -> Dispatcher : GET /hello
@@ -69,75 +141,21 @@ Parser -> Router : route(path)
 Router -> Worker : generate_response()
 Worker -> Browser : HTTP/1.1 200 OK
 @enduml
-""",
-}
+            """
 
-# ---------------------------------------------------------------------------
-# Fonction : écrire la PUML
-# ---------------------------------------------------------------------------
-def write_puml(name: str, content: str):
-    puml_path = UML_DIR / f"{name}.puml"
-    with open(puml_path, "w") as f:
-        f.write(content.strip() + "\n")
-    print(f"✔ PUML généré : {puml_path.name}")
-    return puml_path
+        puml_path.write_text(content.strip())
+        ok(f"PUML généré : {puml_path.name}")
 
-# ---------------------------------------------------------------------------
-# Conversion PUML → SVG (dark/light)
-# ---------------------------------------------------------------------------
-def generate_svg(puml_file: Path):
-    base = puml_file.stem
-    light_svg = UML_DIR / f"{base}.svg"
-    dark_svg  = UML_DIR / f"{base}_dark.svg"
-
-    # Light SVG
-    subprocess.run([
-        "plantuml", "-tsvg", "-o", ".", str(puml_file)
-    ], check=True)
-    print(f"  → SVG Light : {light_svg.name}")
-
-    # Dark mode SVG
-    subprocess.run([
-        "plantuml", "-tsvg", "-o", ".", "-Dskinparam backgroundColor=#1e1e1e",
-        "-Dskinparam ArrowColor=white", "-Dskinparam FontColor=white",
-        str(puml_file)
-    ], check=True)
-    dark_svg.rename(UML_DIR / f"{base}_dark.svg")
-    print(f"  → SVG Dark : {dark_svg.name}")
-
-# ---------------------------------------------------------------------------
-# Suppression fichiers obsolètes
-# ---------------------------------------------------------------------------
-BAD_PATTERNS = [
-    r"uml_seq_mono.*",
-    r"uml_seq_multi.*",
-    r"uml_seq_http_mono_thread.*",
-    r"uml_seq_http_multi_thread.*",
-    r"UML_Sequence.*",
-]
-
-def cleanup_old_files():
-    print("\n🧹 Nettoyage anciens fichiers UML…")
-    for f in UML_DIR.iterdir():
-        name = f.stem
-        for pat in BAD_PATTERNS:
-            if re.match(pat, name):
-                print(f"  → Suppression : {f.name}")
-                f.unlink()
-                break
-
-# ---------------------------------------------------------------------------
-# MAIN
-# ---------------------------------------------------------------------------
-def main():
-    print("\n=== GÉNÉRATION UML ===")
-    cleanup_old_files()
-
-    for name, content in UML_DEFINITIONS.items():
-        puml_path = write_puml(name, content)
         generate_svg(puml_path)
 
-    print("\n✔ UML générés et normalisés avec succès !\n")
+# ============================================
+# MAIN
+# ============================================
+def main():
+    print("\n=== GÉNÉRATION UML (VERSION NINJA PRO) ===\n")
+    cleanup_old_files()
+    generate_puml()
+    print("\n✔ UML générés avec succès\n")
 
 if __name__ == "__main__":
     main()

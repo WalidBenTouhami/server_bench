@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> Dispatcher : CONNECT
+Dispatcher -> Queue : push(job)
+Worker -> Queue : pop(job)
+Worker -> Client : réponse
+@enduml

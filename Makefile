@@ -290,6 +290,24 @@ help:
 	@echo "  make clean        : nettoie build/ et bin/"
 
 # ---------------------------------------------------------------------------
+# Generation uml
+# ---------------------------------------------------------------------------	
+.PHONY: uml
+uml:
+	python3 docs/uml/generate_uml.py
+	python3 docs/uml/update_readme_uml.py
+	
+.PHONY: uml_devserver uml_viewer
+
+uml_devserver:
+	@echo "Lancement UML DevServer EXTREME DEVOPS..."
+	cd docs/uml && python3 uml_devserver.py
+
+uml_viewer:
+	@echo "Ouvre http://localhost:9999/viewer.html dans ton navigateur."
+
+	
+# ---------------------------------------------------------------------------
 # Nettoyage
 # ---------------------------------------------------------------------------
 .PHONY: clean

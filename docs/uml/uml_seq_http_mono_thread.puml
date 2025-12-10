@@ -1,8 +1,0 @@
-@startuml
-actor Browser
-Browser -> Server : GET /hello
-Server -> Parser : parse_http_request()
-Parser -> Router : route(path)
-Router -> Server : generate_response()
-Server -> Browser : HTTP/1.1 200 OK
-@enduml

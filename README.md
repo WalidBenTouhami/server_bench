@@ -313,6 +313,7 @@ make run_multi_http
 make kill_servers
 
 # 📂 Arborescence du projet
+"""
 server_project/
 ├── src/
 ├── python/
@@ -328,48 +329,49 @@ server_project/
 │   │   ├── uml_seq_http_monothread.svg
 │   │   ├── uml_seq_http_multithread.svg
 │   │   └── update_readme_uml.py
+"""
 ---
 
-# 🧠 UML — Architecture & Threads
+#🧠 UML — Architecture & Threads
 
 (Section auto-générée par docs/uml/update_readme_uml.py)
 
 Architecture globale
-<img src="docs/uml/uml_architecture.svg" width="900">
+<img src="docs/uml/uml_architecture.svg" width="900">>
 
 Queue FIFO Thread-Safe
-<img src="docs/uml/uml_queue.svg" width="900">
+<img src="docs/uml/uml_queue.svg" width="900">>
 
 Multi-threading – Workers & Dispatcher
-<img src="docs/uml/uml_threads.svg" width="900">
+<img src="docs/uml/uml_threads.svg" width="900">>
 
 ---
 
-## Séquences TCP
+##Séquences TCP
 
 TCP Mono-thread
-<img src="docs/uml/uml_seq_tcp_monothread.svg" width="900">
+<img src="docs/uml/uml_seq_tcp_monothread.svg" width="900">>
 
 TCP Multi-thread
-<img src="docs/uml/uml_seq_tcp_multithread.svg" width="900">
+<img src="docs/uml/uml_seq_tcp_multithread.svg" width="900">>
 
 ---
 
-## Séquences HTTP
+##Séquences HTTP
 
 HTTP Mono-thread
-<img src="docs/uml/uml_seq_http_monothread.svg" width="900">
+<img src="docs/uml/uml_seq_http_monothread.svg" width="900">>
 
 HTTP Multi-thread
-<img src="docs/uml/uml_seq_http_multithread.svg" width="900">
+<img src="docs/uml/uml_seq_http_multithread.svg" width="900">>
 
-# 🌐 API HTTP — Documentation Complète
+#🌐 API HTTP — Documentation Complète
 
-##🔹 Routes disponibles
+##Routes disponibles
 
-### Route	Méthode	Description
-/	GET	Accueil + liste des routes
-/hello	GET	Message JSON
+###Route	Méthode 	Description
+/	        GET	        Accueil + liste des routes
+/hello	        GET	        Message JSON
 /time	GET	Heure du serveur
 /stats	GET	Statistiques globales
 

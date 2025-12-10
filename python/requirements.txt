@@ -24,3 +24,7 @@ python-pptx
 # Génération de PDF (rapport dashboard.pdf)
 reportlab
 
+#Web views
+websockets 
+watchdog
+
