@@ -1,0 +1,32 @@
+@startuml
+title Séquence – Serveur HTTP Multi-thread (serveur_multi_http.c)
+
+actor Client
+participant "Dispatcher\n(accept)" as D
+participant "queue FIFO" as Q
+participant "Worker[i]" as W
+participant "http.c\n(parse)" as H
+
+Client -> D : TCP connect()
+Client -> D : HTTP GET /path
+D -> Q : queue_push(job)
+
+W -> Q : queue_pop()
+Q --> W : job(client_fd)
+
+W -> H : parse_http_request()
+H --> W : method, path, query
+
+alt route "/hello"
+    W -> Client : HTTP 200 OK\n{ "msg": ... }
+else route "/time"
+    W -> Client : HTTP 200 OK\n{ "server_time": ... }
+else route "/stats"
+    W -> Client : HTTP 200 OK\n{ ... }
+else
+    W -> Client : HTTP 404 Not Found
+end
+
+W -> W : close(client_fd)
+
+@enduml
