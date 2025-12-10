@@ -1,0 +1,8 @@
+@startuml
+actor Client
+Client -> Dispatcher : connect()
+Dispatcher -> Queue : push(fd)
+Worker -> Queue : pop(fd)
+Worker -> Worker : traitement_lourd()
+Worker -> Client : send(result + timestamp)
+@enduml
