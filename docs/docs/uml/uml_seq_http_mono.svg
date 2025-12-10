@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="700">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="black" />
+    </marker>
+  </defs>
+
+  <text x="20" y="40" font-size="26" font-weight="bold">
+    UML Sequence — Serveur HTTP Mono-thread
+  </text>
+
+  <!-- Lifelines -->
+  <text x="120" y="80" font-size="20">Client Web</text>
+  <line x1="150" y1="110" x2="150" y2="660" stroke="black" stroke-dasharray="4,4"/>
+
+  <text x="500" y="80" font-size="20">HTTP Server</text>
+  <line x1="530" y1="110" x2="530" y2="660" stroke="black" stroke-dasharray="4,4"/>
+
+  <text x="900" y="80" font-size="20">HTTP Parser</text>
+  <line x1="930" y1="110" x2="930" y2="660" stroke="black" stroke-dasharray="4,4"/>
+
+  <!-- Sequence -->
+  <line x1="150" y1="150" x2="530" y2="150" stroke="black" marker-end="url(#arrow)"/>
+  <text x="220" y="140" font-size="18">GET /hello</text>
+
+  <line x1="530" y1="190" x2="930" y2="190" stroke="black" marker-end="url(#arrow)"/>
+  <text x="600" y="180" font-size="18">parse_http_request()</text>
+
+  <line x1="930" y1="230" x2="530" y2="230" stroke="black" marker-end="url(#arrow)"/>
+  <text x="700" y="220" font-size="18">method, path, query</text>
+
+  <rect x="490" y="260" width="120" height="50" fill="#ddd" stroke="black"/>
+  <text x="500" y="292" font-size="16">route_request()</text>
+
+  <line x1="530" y1="340" x2="150" y2="340" stroke="black" marker-end="url(#arrow)"/>
+  <text x="250" y="330" font-size="18">HTTP 200 OK + JSON</text>
+
+  <line x1="150" y1="380" x2="530" y2="380" stroke="black" marker-end="url(#arrow)"/>
+  <text x="260" y="370" font-size="18">close()</text>
+</svg>
