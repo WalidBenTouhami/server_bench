@@ -1,0 +1,10 @@
+@startuml
+actor Browser
+Browser -> Dispatcher : GET /hello
+Dispatcher -> Queue : push(job)
+Worker -> Queue : pop(job)
+Worker -> Parser : parse_http_request()
+Parser -> Router : route(path)
+Router -> Worker : generate_response()
+Worker -> Browser : HTTP/1.1 200 OK
+@enduml
