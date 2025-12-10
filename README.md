@@ -23,24 +23,25 @@
 
 # 📦 Résumé du projet
 
-Ce projet implémente **quatre serveurs réseau haute performance** en C/POSIX :
+Ce projet implémente **quatre serveurs réseau haute performance** :
 
-| Serveur | Protocole | Architecture | Fichier |
-|--------|-----------|--------------|---------|
-| `serveur_mono` | TCP | Mono-thread | `src/serveur_mono.c` |
-| `serveur_multi` | TCP | Multi-thread + queue | `src/serveur_multi.c` |
-| `serveur_mono_http` | HTTP 1.1 | Mono-thread | `src/serveur_mono_http.c` |
-| `serveur_multi_http` | HTTP 1.1 | Multi-thread + queue | `src/serveur_multi_http.c` |
+| Serveur              | Protocole | Architecture            | Fichier                    |
+| -------------------- | --------- | ----------------------- | -------------------------- |
+| `serveur_mono`       | TCP       | Mono-thread             | `src/serveur_mono.c`       |
+| `serveur_multi`      | TCP       | Multi-thread avec queue | `src/serveur_multi.c`      |
+| `serveur_mono_http`  | HTTP 1.1  | Mono-thread             | `src/serveur_mono_http.c`  |
+| `serveur_multi_http` | HTTP 1.1  | Multi-thread avec queue | `src/serveur_multi_http.c` |
+
 
 Le projet inclut :
 
-- ✔ File FIFO générique thread-safe (`queue.c`)
-- ✔ Parseur HTTP robuste (`http.c`)
-- ✔ Benchmarks Python (latence, CPU, RAM, RPS)
-- ✔ Dashboard interactif Plotly HTML
-- ✔ Scripts DevOps (run_all, monitoring, auto-rebuild)
-- ✔ Présentation académique PPTX + script PDF
-
+✔ Queue FIFO générique thread-safe (`queue.c`)
+✔ Parseur HTTP robuste (`http.c`)
+✔ Benchmarks Python (latence, CPU, mémoire, RPS)
+✔ Dashboard interactif Plotly
+✔ UML générés automatiquement (PlantUML → SVG)
+✔ Scripts DevOps & monitoring
+✔ Présentation académique professionnelle
 ---
 
 ## 🔍 Comparaison Technique : Mono-thread vs Multi-thread
@@ -236,155 +237,187 @@ Perte de 12-18% due à :
 
 Ou manuellement :
 
-## 1️⃣ Prérequis système (Ubuntu / Debian)
-
-```bash
+# 1️⃣ Prérequis
 sudo apt update
-sudo apt install -y build-essential python3 python3-venv python3-pip curl netcat make git
-```
+sudo apt install -y build-essential python3 python3-venv python3-pip \
+                   make git netcat curl
 
-Dépendances Python pour les benchmarks :
 
-```bash
+Dépendances Python :
+
 pip install psutil pandas matplotlib plotly kaleido
-```
 
----
-
-## 2️⃣ Cloner le projet
-
-```bash
+# 2️⃣ Cloner le projet
 git clone https://github.com/.../SERVER_BENCH.git
 cd server_project
-```
 
----
+# 3️⃣ Compiler
 
-## 3️⃣ Compiler les serveurs C
+Mode optimisé :
 
-Mode normal :
-
-```bash
-make clean
 make -j$(nproc)
-```
 
-Mode debug avec sanitizers :
 
-```bash
+Mode debug :
+
 make debug
-```
 
----
-
-## 4️⃣ Installer l’environnement Python
-
-```bash
+# 4️⃣ Environnement Python
 cd python
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
 
----
-
-## 5️⃣ Lancer un benchmark complet
-
-Depuis la racine du projet :
-
-```bash
+# 5️⃣ Exécuter les benchmarks
 ./scripts/run_all.sh
-```
 
-Les résultats seront générés dans :
 
-```
-python/results.json  
-python/results.xlsx  
-python/figures/*.png
-```
+# Dashboard :
 
-Et un Dashboard interactif :
-
-```bash
 python/dashboard.html
-```
 
 ---
 
-## 6️⃣ Tester le projet
+# 🧪 Tests Unitaires & Outils Qualité
 
-```bash
-./scripts/run_tests.sh
-```
+Tests queue FIFO
+make test
 
----
+Valgrind
+valgrind --leak-check=full ./bin/serveur_multi
 
-## 7️⃣ Nettoyage complet
+Helgrind
+valgrind --tool=helgrind ./bin/serveur_multi
 
-```bash
-./scripts/clean_project.sh
-```
+Sanitizers
+make debug
 
----
+# ⚙ Exécution des serveurs
+TCP
+make run_mono
+make run_multi
+
+HTTP
+make run_mono_http
+make run_multi_http
+
+
+# Arrêt :
+
+make kill_servers
 
 # 📂 Arborescence du projet
-
-```text
 server_project/
 ├── src/
-│   ├── serveur_mono.c
-│   ├── serveur_multi.c
-│   ├── serveur_mono_http.c
-│   ├── serveur_multi_http.c
-│   ├── queue.c / queue.h
-│   ├── http.c / http.h
-│
 ├── python/
-│   ├── benchmark.py
-│   ├── client_stress.py
-│   ├── dashboard.html
-│   ├── results.json / results.xlsx
-│   ├── figures/
-│
-├── presentation/
-│   ├── presentation_finale_serveur.pptx
-│   ├── script_presentation.pdf
-│   └── backgrounds/
-│
-├── scripts/
-│   ├── run_all.sh
-│   ├── run_servers.sh
-│   ├── run_tests.sh
-│   ├── clean_project.sh
-│   └── open_dashboard.sh
-│
-└── rebuild_project.py
-```
-
+├── docs/
+│   ├── CHALLENGES.md
+│   ├── uml/
+│   │   ├── generate_uml.py
+│   │   ├── uml_architecture.svg
+│   │   ├── uml_queue.svg
+│   │   ├── uml_threads.svg
+│   │   ├── uml_seq_tcp_monothread.svg
+│   │   ├── uml_seq_tcp_multithread.svg
+│   │   ├── uml_seq_http_monothread.svg
+│   │   ├── uml_seq_http_multithread.svg
+│   │   └── update_readme_uml.py
 ---
 
 # 🧠 UML — Architecture & Threads
 
-## UML 1 — Architecture globale
+(Section auto-générée par docs/uml/update_readme_uml.py)
 
-<img src="docs/docs/uml/uml_architecture.svg" width="900">
+Architecture globale
+<img src="docs/uml/uml_architecture.svg" width="900">
 
----
+Queue FIFO Thread-Safe
+<img src="docs/uml/uml_queue.svg" width="900">
 
-## UML 2 — Queue FIFO Thread-Safe
-
-<img src="docs/docs/uml/uml_queue.svg" width="900">
-
----
-
-## UML 3 — Multi-threading (Workers & Dispatcher)
-
-<img src="docs/docs/uml/uml_threads.svg" width="900">
+Multi-threading – Workers & Dispatcher
+<img src="docs/uml/uml_threads.svg" width="900">
 
 ---
 
-# 📊 Résultats Benchmark (images générées)
+## Séquences TCP
+
+TCP Mono-thread
+<img src="docs/uml/uml_seq_tcp_monothread.svg" width="900">
+
+TCP Multi-thread
+<img src="docs/uml/uml_seq_tcp_multithread.svg" width="900">
+
+---
+
+## Séquences HTTP
+
+HTTP Mono-thread
+<img src="docs/uml/uml_seq_http_monothread.svg" width="900">
+
+HTTP Multi-thread
+<img src="docs/uml/uml_seq_http_multithread.svg" width="900">
+
+# 🌐 API HTTP — Documentation Complète
+
+##🔹 Routes disponibles
+
+### Route	Méthode	Description
+/	GET	Accueil + liste des routes
+/hello	GET	Message JSON
+/time	GET	Heure du serveur
+/stats	GET	Statistiques globales
+
+### Exemple /hello
+{
+  "msg": "Bonjour depuis serveur HTTP",
+  "worker": "mono | pthread"
+}
+
+### Exemple /stats
+{
+  "total_requests": 193,
+  "hello_requests": 42,
+  "not_found": 3
+}
+
+# 🔄 Tableau Comparatif TCP vs HTTP
+
+Critère	TCP (serveur_mono/multi)	HTTP 1.1 (mono/multi)
+Modèle	Stream brut	Requêtes / Réponses JSON/HTML
+Parsing	Manuel	Automatique (http.c)
+Overhead	Très faible	Moyen
+Debug	Peu lisible	Très lisible (curl, Browser)
+Usage	Calcul distribué, RPC	API REST, tests navigateur
+Messages	Binaires	Texte/JSON
+Statut	Pas de notion de codes	Codes HTTP 200/404/500
+
+# 🔍 Analyse Technique — Mono-thread vs Multi-thread
+
+## Mono-thread :
+
+✔ simple
+❌ scalable
+❌ chaque client attend le précédent
+
+## Multi-thread :
+
+✔ parallélisme réel
+✔ workers permanents
+✔ queue FIFO bornée
+✔ meilleure latence P99
+✔ throughput 6× à 10× supérieur
+
+# 📊 Benchmarks (Auto-générés)
+
+Les scripts Python génèrent :
+
+results.json
+
+results.xlsx
+
+python/figures/*.png
+
+Dashboard HTML : python/dashboard.html
 
 ## Throughput (req/s)
 
@@ -491,14 +524,7 @@ Inclut :
 
 ## 🚧 Défis Techniques Rencontrés
 
-Voir documentation détaillée : [docs/CHALLENGES.md](docs/CHALLENGES.md)
-
-**Résumé des principaux défis :**
-- 🐛 **Race Conditions** : Accès concurrent à la queue → solution avec mutex
-- 🔒 **Deadlock** : Shutdown bloqué → solution avec pthread_cond_broadcast()
-- 💾 **Fuites Mémoires** : malloc sans free → détection Valgrind
-- ⚡ **Saturation** : Queue trop petite → augmentation capacité
-- 🔧 **Cohérence** : Données corrompues → stratégies d'atomicité
+Voir : docs/CHALLENGES.md
 
 **Outils utilisés :**
 - Valgrind (memcheck + helgrind)
@@ -511,6 +537,7 @@ Voir documentation détaillée : [docs/CHALLENGES.md](docs/CHALLENGES.md)
 # 📄 Licence
 
 ```
-MIT License — Seulement l'usage académique est autorisé!
+MIT License — Usage académique uniquement
+
 ```
 

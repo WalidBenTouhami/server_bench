@@ -1,7 +1,7 @@
 ###############################################################################
 #   MAKEFILE ULTRA-OPTIMISÉ – Serveurs TCP/HTTP (C/POSIX) + Queue FIFO + HTTP
 #   Auteur  : Walid Ben Touhami
-#   Version : 3.0 (Release / Debug / Outils d'analyse)
+#   Version : 3.1 (Release / Debug / Outils d'analyse + UML)
 ###############################################################################
 
 # ---------------------------------------------------------------------------
@@ -11,6 +11,17 @@ SRC_DIR   := src
 TEST_DIR  := tests
 BUILD_DIR := build
 BIN_DIR   := bin
+
+# Dossiers UML
+UML_DIR   := docs/uml
+UML_GEN   := $(UML_DIR)/generate_uml.py
+
+# Règles de nommage UML officielles
+UML_SEQ_BASENAMES := \
+	uml_seq_tcp_monothread \
+	uml_seq_tcp_multithread \
+	uml_seq_http_monothread \
+	uml_seq_http_multithread
 
 # ---------------------------------------------------------------------------
 # Mode de compilation : release (par défaut) ou debug
@@ -224,6 +235,37 @@ tidy:
 	clang-tidy $(SRC_DIR)/*.c -- -I$(SRC_DIR)
 
 # ---------------------------------------------------------------------------
+# UML : génération / nettoyage / vérification / viewer
+# ---------------------------------------------------------------------------
+.PHONY: uml uml_clean uml_check uml_open
+
+uml:
+	@echo "$(BLUE)[UML] Génération UML (PUML + SVG + Dark) avec règles de nommage$(RESET)"
+	@cd $(UML_DIR) && python3 generate_uml.py
+	@$(MAKE) uml_check
+	@echo "$(GREEN)[OK] UML générés et conformes à la nomenclature$(RESET)"
+
+uml_clean:
+	@echo "$(RED)[CLEAN UML] Suppression des fichiers UML générés (puml/svg/png)$(RESET)"
+	@find $(UML_DIR) -maxdepth 1 -type f \( -name 'uml_*.puml' -o -name 'uml_*.svg' -o -name 'uml_*.png' \) -delete
+
+uml_check:
+	@echo "$(CYAN)[UML] Vérification des fichiers UML attendus$(RESET)"
+	@cd $(UML_DIR) && \
+	for base in $(UML_SEQ_BASENAMES); do \
+		if [ ! -f "$${base}.puml" ] || [ ! -f "$${base}.svg" ]; then \
+			echo "$(RED)[UML] Manquant : $${base}.puml ou $${base}.svg$(RESET)"; \
+			exit 1; \
+		else \
+			echo "$(GREEN)[UML] OK : $${base}.puml / $${base}.svg$(RESET)"; \
+		fi; \
+	done
+
+uml_open:
+	@echo "$(BLUE)[UML] Ouverture du viewer UML (si présent)$(RESET)"
+	@xdg-open $(UML_DIR)/viewer.html 2>/dev/null || echo "Ouvrez docs/uml/viewer.html manuellement."
+
+# ---------------------------------------------------------------------------
 # Aide
 # ---------------------------------------------------------------------------
 .PHONY: help
@@ -241,6 +283,10 @@ help:
 	@echo "  make helgrind     : analyse race conditions serveur_multi"
 	@echo "  make format       : applique clang-format si dispo"
 	@echo "  make tidy         : analyse statique clang-tidy"
+	@echo "  make uml          : génère tous les UML (puml + svg) avec nomenclature stricte"
+	@echo "  make uml_clean    : nettoie les fichiers UML générés"
+	@echo "  make uml_check    : vérifie la présence des UML normés"
+	@echo "  make uml_open     : ouvre le viewer HTML UML (si disponible)"
 	@echo "  make clean        : nettoie build/ et bin/"
 
 # ---------------------------------------------------------------------------
@@ -250,3 +296,4 @@ help:
 clean:
 	@echo "$(RED)[CLEAN] Suppression build/ et bin/$(RESET)"
 	@rm -rf $(BUILD_DIR) $(BIN_DIR)
+
