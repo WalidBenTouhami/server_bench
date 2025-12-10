@@ -1,0 +1,17 @@
+@startuml
+title Séquence – Serveur TCP Mono-thread (serveur_mono.c)
+
+actor Client
+participant "serveur_mono" as S
+
+Client -> S : TCP connect()
+S -> S : accept()
+Client -> S : send(number)
+S -> S : recv(number)
+S -> S : traitement_lourd()
+S -> S : compute result + timestamp
+S -> Client : send(result)
+S -> Client : send(timestamp)
+S -> S : close(client_fd)
+
+@enduml
