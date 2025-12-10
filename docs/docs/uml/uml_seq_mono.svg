@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500">
+<text x="20" y="40" font-size="22">UML Sequence : Serveur TCP Mono-thread</text>
+<line x1="150" y1="80" x2="150" y2="450" stroke="black" />
+<text x="120" y="70">Client</text>
+
+<line x1="450" y1="80" x2="450" y2="450" stroke="black" />
+<text x="400" y="70">ServerMono</text>
+
+<line x1="150" y1="120" x2="450" y2="120" stroke="black" marker-end="url(#arrow)"/>
+<text x="200" y="110">connect()</text>
+
+<line x1="450" y1="160" x2="450" y2="200" stroke="black"/>
+<text x="460" y="180">recv()</text>
+
+<line x1="450" y1="220" x2="450" y2="260" stroke="black"/>
+<text x="460" y="240">traitement_lourd()</text>
+
+<line x1="450" y1="300" x2="150" y2="300" stroke="black" marker-end="url(#arrow)"/>
+<text x="260" y="290">send(result)</text>
+
+<line x1="150" y1="340" x2="450" y2="340" stroke="black" marker-end="url(#arrow)"/>
+<text x="230" y="330">close()</text>
+</svg>
