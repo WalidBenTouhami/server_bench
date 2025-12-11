@@ -16,12 +16,11 @@
 
 # 🔧 Badges GitHub Actions (CI/CD)
 
-| Workflow                                  | Badge                                                                                                                                       |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Build & Tests (GCC + Make + Valgrind)** | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main\&style=flat-square)       |
-| **Static Analysis (Cppcheck)**            | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main\&style=flat-square) |
-| **CodeQL Security Scan**                  | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main\&style=flat-square)     |
-| **Benchmarks Python**                     | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main\&style=flat-square)  |
+![CI/CD Status](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/build.yml/badge.svg)
+![Static Analysis](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/cppcheck.yml/badge.svg)
+![Security](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/codeql.yml/badge.svg)
+![Benchmarks](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/benchmarks.yml/badge.svg)
+![Performance](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/badge.json&style=flat-square)
 
 ---
 
