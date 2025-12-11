@@ -18,14 +18,18 @@
 
 # SERVER_BENCH – Comparaison mono-thread vs multi-thread (C + pthread)
 
+# SERVER_BENCH – Comparaison mono-thread vs multi-thread en C (pthread)
+
 ![Build & Tests](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Build%20&%20Test/badge.svg)
 ![Cppcheck](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Cppcheck%20Analysis/badge.svg)
 ![CodeQL](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/CodeQL%20Security%20Scan/badge.svg)
 ![Benchmarks](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Benchmarks/badge.svg)
+![Deploy Docs](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Deploy%20Docs/badge.svg)
 
-**Performance actuelle (mise à jour automatique) :**  
-![Throughput](https://img.shields.io/badge/throughput-XXX%20req/s-brightgreen)  
-(rafraîchit à chaque push sur main)
+**Performance actuelle (mise à jour automatique à chaque push) :**  
+![Throughput](https://img.shields.io/badge/throughput-312%20req/s-brightgreen)
+
+**Documentation en ligne** → https://walidbentouhami.github.io/SERVER_BENCH/
 
 ---
 
