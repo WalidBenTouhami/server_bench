@@ -16,11 +16,16 @@
 
 # 🔧 Badges GitHub Actions (CI/CD)
 
-![CI/CD Status](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/build.yml/badge.svg)
-![Static Analysis](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/cppcheck.yml/badge.svg)
-![Security](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/codeql.yml/badge.svg)
-![Benchmarks](https://github.com/WalidBenTouhami/SERVER_BENCH/actions/workflows/benchmarks.yml/badge.svg)
-![Performance](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/badge.json&style=flat-square)
+# SERVER_BENCH – Comparaison mono-thread vs multi-thread (C + pthread)
+
+![Build & Tests](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Build%20&%20Test/badge.svg)
+![Cppcheck](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Cppcheck%20Analysis/badge.svg)
+![CodeQL](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/CodeQL%20Security%20Scan/badge.svg)
+![Benchmarks](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Benchmarks/badge.svg)
+
+**Performance actuelle (mise à jour automatique) :**  
+![Throughput](https://img.shields.io/badge/throughput-XXX%20req/s-brightgreen)  
+(rafraîchit à chaque push sur main)
 
 ---
 
