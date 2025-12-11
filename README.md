@@ -14,7 +14,7 @@
 
 ---
 
-# SERVER_BENCH – Comparaison mono-thread vs multi-thread en C (pthread)
+## SERVER_BENCH – Comparaison mono-thread vs multi-thread en C (pthread)
 
 ## 🔧 Badges GitHub Actions (CI/CD)
 
@@ -37,7 +37,7 @@
 
 ---
 
-# 📚 Table des matières
+## 📚 Table des matières
 
 * [🎥 GIF Démonstrations](#-gif-démonstrations)
 * [📦 Projet — Version FR/EN](#-projet--version-fren)
@@ -54,19 +54,21 @@
 
 ---
 
-# 🎥 GIF Démonstrations
+## 🎥 GIF Démonstrations
 
 ### Serveur TCP Multi-thread
 
-![server-multi](docs/gif/server_multi.gif)
+<!-- ![server-multi](docs/gif/server_multi.gif) -->
+_GIF demonstration will be added soon._
 
 ### Stress Test & Benchmarks
 
-![bench](docs/gif/benchmark.gif)
+<!-- ![bench](docs/gif/benchmark.gif) -->
+_GIF demonstration will be added soon._
 
 ---
 
-# 📦 Projet — Version FR/EN
+## 📦 Projet — Version FR/EN
 
 ## 🇫🇷 Version Française
 
@@ -104,7 +106,7 @@ This project provides **4 high-performance network servers** using POSIX sockets
 
 ---
 
-# 🧠 Mermaid Diagrams
+## 🧠 Mermaid Diagrams
 
 ## Architecture Globale
 
@@ -151,7 +153,7 @@ sequenceDiagram
 
 ---
 
-# 📊 Benchmarks
+## 📊 Benchmarks
 
 ### Throughput
 
@@ -171,7 +173,7 @@ sequenceDiagram
 
 ---
 
-# 🛠 Installation
+## 🛠 Installation
 
 ```bash
 sudo apt install build-essential python3 python3-venv python3-pip
@@ -182,7 +184,7 @@ make -j$(nproc)
 
 ---
 
-# ⚙ Exécution
+## ⚙ Exécution
 
 ```bash
 make run_mono
@@ -193,7 +195,7 @@ make run_multi_http
 
 ---
 
-# 🧪 Tests & Validation
+## 🧪 Tests & Validation
 
 ```bash
 make test                                        # Run unit tests
@@ -225,7 +227,7 @@ Le projet utilise des optimisations avancées pour des performances maximales :
 
 ---
 
-# 📡 API HTTP
+## 📡 API HTTP
 
 | Route    | Description  |
 | -------- | ------------ |
@@ -246,7 +248,7 @@ Example:
 
 ---
 
-# 📂 Architecture du projet
+## 📂 Architecture du projet
 
 ```
 src/
@@ -260,9 +262,9 @@ src/
 
 ---
 
-# 🚀 Pipeline DevOps complet
+## 🚀 Pipeline DevOps complet
 
-### Exécution globale :
+### Exécution globale
 
 ```bash
 ./scripts/run_interactive.sh
@@ -283,7 +285,7 @@ Il exécute automatiquement :
 
 ---
 
-# 👤 Auteurs
+## 👤 Auteurs
 
 | Auteur                 | Rôle                                | Expertise                |
 | ---------------------- | ----------------------------------- | ------------------------ |
@@ -294,10 +296,8 @@ Il exécute automatiquement :
 
 ---
 
-# 📜 Licence
+## 📜 Licence
 
 ```
 MIT License — Academic Use Only
 ```
-
----
