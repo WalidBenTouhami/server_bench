@@ -129,25 +129,25 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    classDef client fill:#0af,color:#fff,stroke:#036,stroke-width: 2px;
-    classDef dispatcher fill:#09f,color:#fff,stroke:#036,stroke-width:2px;
+    classDef client fill:#0af,color:#fff,stroke:#036,stroke-width:2px;
+    classDef accept fill:#09f,color:#fff,stroke:#036,stroke-width:2px;
     classDef queue fill:#f90,color:#000,stroke:#630,stroke-width:2px;
-    classDef worker fill:#6c0,color:#fff,stroke:#030,stroke-width:2px;
-    classDef process fill:#c0c,color:#fff,stroke:#505,stroke-width:2px;
-    classDef response fill:#555,color:#fff,stroke:#222,stroke-width:2px;
+    classDef worker fill:#6c0,color:#fff,stroke:#030,stroke-width: 2px;
+    classDef treat fill:#c0c,color:#fff,stroke:#505,stroke-width:2px;
+    classDef resp fill:#555,color:#fff,stroke:#222,stroke-width:2px;
 
-    A["Clients 1..N"]:::client --> B["accept()"]:::dispatcher
-    B --> C["Queue FIFO<br/>(mutex + condvars)"]:::queue
+    A["Clients 1.. N"]:::client --> B["accept()"]:::accept
+    B --> C["Queue FIFO<br/>(Mutex + CondVar)"]:::queue
 
-    C --> W1["Worker 1"]:::worker
-    C --> W2["Worker 2"]:::worker
-    C --> WN["Worker N"]:::worker
+    C --> D["Worker 1"]:::worker
+    C --> E["Worker 2"]:::worker
+    C --> F["Worker N"]:::worker
 
-    W1 --> T("Traitement"):::process
-    W2 --> T
-    WN --> T
+    D --> G("Traitement<br/>CPU-bound"):::treat
+    E --> G
+    F --> G
 
-    T --> R["send()<br/>Réponse"]:::response
+    G --> H["send()<br/>Réponse"]:::resp
 ```
 
 ---
