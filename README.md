@@ -18,19 +18,18 @@
 
 ## 🔧 Badges GitHub Actions (CI/CD)
 
-# 🛠 Badges CI/CD – Advanced
+| Workflow        | Status |
+|-----------------|--------|
+| Build & Tests   | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main&style=flat-square) |
+| Cppcheck        | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main&style=flat-square) |
+| CodeQL          | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main&style=flat-square) |
+| Benchmarks      | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main&style=flat-square) |
+| Deploy Docs     | ![Deploy](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/deploy_docs.yml?branch=main&style=flat-square) |
 
-| Workflow | Status |
-|---------|--------|
-| Build & Tests | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main&style=flat-square) |
-| Cppcheck | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main&style=flat-square) |
-| CodeQL | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main&style=flat-square) |
-| Benchmarks | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main&style=flat-square) |
-| Deploy Docs | ![Docs](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/deploy_docs.yml?branch=main&style=flat-square) |
 
-🔥 Throughput actuel :  
-![TP](docs/badges/throughput.svg)
+🔥 **Throughput actuel :**
 
+<img src="https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/python/figures/THROUGHPUT_LIVE.png" width="350"/>
 
 
 **Documentation en ligne** → https://walidbentouhami.github.io/SERVER_BENCH/
