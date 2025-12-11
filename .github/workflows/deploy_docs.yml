@@ -96,6 +96,7 @@ jobs:
           fi
 
       - name: Verify prepared docs
+        if: steps.pages.outcome == 'success'
         run: |
           echo "Verifying public directory contents..."
           if [ ! -d public ]; then
