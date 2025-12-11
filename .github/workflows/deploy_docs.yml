@@ -27,6 +27,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify markdown files
+        run: |
+          echo "Checking markdown files exist and are readable..."
+          if [ -d docs ]; then
+            find docs -name "*.md" -type f -exec echo "✓ Found: {}" \;
+          fi
+          if [ -f README.md ]; then
+            echo "✓ Found: README.md"
+          fi
+          
+          # Check for common markdown issues
+          echo "Verifying markdown files..."
+          
+          # Verify docs directory markdown files
+          if [ -d docs ]; then
+            find docs -name "*.md" -type f -print0 | while IFS= read -r -d '' file; do
+              # Check file is not empty
+              if [ ! -s "$file" ]; then
+                echo "⚠️  Warning: $file is empty"
+              fi
+              # Check for valid UTF-8 encoding
+              if ! file "$file" | grep -q "UTF-8\|ASCII"; then
+                echo "⚠️  Warning: $file may have encoding issues"
+              fi
+              echo "✓ Verified: $file"
+            done
+          fi
+          
+          # Verify README.md separately
+          if [ -f README.md ]; then
+            if [ ! -s README.md ]; then
+              echo "⚠️  Warning: README.md is empty"
+            fi
+            if ! file README.md | grep -q "UTF-8\|ASCII"; then
+              echo "⚠️  Warning: README.md may have encoding issues"
+            fi
+            echo "✓ Verified: README.md"
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -36,9 +75,34 @@ jobs:
         run: |
           mkdir -p public
           if [ -d docs ]; then
-            cp -r docs/* public/ 2>/dev/null || true
+            # Copy docs directory contents if not empty
+            if [ "$(ls -A docs)" ]; then
+              cp -r docs/* public/
+            fi
           fi
-          cp README.md public/README.md 2>/dev/null || true
+          # Copy README.md if it exists
+          if [ -f README.md ]; then
+            cp README.md public/README.md
+          fi
+
+      - name: Verify prepared docs
+        run: |
+          echo "Verifying public directory contents..."
+          if [ ! -d public ]; then
+            echo "❌ Error: public directory not created"
+            exit 1
+          fi
+          
+          # Check that we have files to deploy
+          file_count=$(find public -type f | wc -l | tr -d ' ')
+          if [ "$file_count" -eq 0 ]; then
+            echo "❌ Error: No files found in public directory"
+            exit 1
+          fi
+          
+          echo "✓ Found $file_count files in public directory"
+          echo "Contents:"
+          find public -type f | head -20
 
       - uses: actions/upload-pages-artifact@v3
         with:
