@@ -1,35 +1,35 @@
 # 🚀 Serveur TCP & HTTP Hautes Performances — C/POSIX
 
-## ⚡ Extreme Edition — Multi-threading • Queue FIFO • Benchmarks • UML • Mermaid • CI/CD
+## ⚡ Extreme Edition — Multi-threading · Queue FIFO · Benchmarks · UML · Mermaid · CI/CD
 
 ---
 
 <p align="center">
   <img src="https://img.shields.io/badge/C89-POSIX-blue?style=flat-square"/>
-  <img src="https://img.shields.io/badge/MultiThreading-pthreads-purple?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Multithreading-pthreads-purple?style=flat-square"/>
   <img src="https://img.shields.io/badge/HTTP-1.1-orange?style=flat-square"/>
   <img src="https://img.shields.io/badge/Benchmark-Python3-yellow?style=flat-square"/>
-  <img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square"/>
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square"/>
 </p>
 
 ---
 
-# 🔧 **Badges GitHub Actions CI/CD (Advanced)**
+# 🔧 Badges GitHub Actions (CI/CD)
 
-| Workflow                                 | Badge                                                                                                                                         |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Build & Test (GCC + Make + Valgrind)** | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/build.yml?branch=main\&style=flat-square)       |
-| **Static Analysis (Cppcheck)**           | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/cppcheck.yml?branch=main\&style=flat-square) |
-| **CodeQL Security Scan**                 | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/codeql.yml?branch=main\&style=flat-square)     |
-| **Python Benchmarks CI**                 | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/benchmarks.yml?branch=main\&style=flat-square)  |
+| Workflow                                  | Badge                                                                                                                                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Build & Tests (GCC + Make + Valgrind)** | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main\&style=flat-square)       |
+| **Static Analysis (Cppcheck)**            | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main\&style=flat-square) |
+| **CodeQL Security Scan**                  | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main\&style=flat-square)     |
+| **Benchmarks Python**                     | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main\&style=flat-square)  |
 
 ---
 
-# 📚 Table des matières automatique
+# 📚 Table des matières
 
 * [🎥 GIF Démonstrations](#-gif-démonstrations)
 * [📦 Projet — Version FR/EN](#-projet--version-fren)
-* [🧠 Diagrams Mermaid intégrés](#-diagrams-mermaid-intégrés)
+* [🧠 Mermaid Diagrams](#-mermaid-diagrams)
 * [📊 Benchmarks](#-benchmarks)
 * [🛠 Installation](#-installation)
 * [⚙ Exécution](#-exécution)
@@ -37,7 +37,6 @@
 * [📡 API HTTP](#-api-http)
 * [📂 Architecture du projet](#-architecture-du-projet)
 * [🚀 Pipeline DevOps complet](#-pipeline-devops-complet)
-* [🔧 Intégration CI/CD — Workflows GitHub](#-intégration-cicd--workflows-github)
 * [👤 Auteurs](#-auteurs)
 * [📜 Licence](#-licence)
 
@@ -45,57 +44,57 @@
 
 # 🎥 GIF Démonstrations
 
-### Multi-thread server execution
+### Serveur TCP Multi-thread
 
 ![server-multi](docs/gif/server_multi.gif)
 
-### Benchmark execution
+### Stress Test & Benchmarks
 
 ![bench](docs/gif/benchmark.gif)
 
 ---
 
-# 📦 **Projet — Version FR/EN**
+# 📦 Projet — Version FR/EN
 
 ## 🇫🇷 Version Française
 
-Ce projet implémente **4 serveurs réseau haute performance** :
+Ce projet implémente **4 serveurs haute performance** :
 
-| Serveur            | Protocole | Architecture        |
-| ------------------ | --------- | ------------------- |
-| serveur_mono       | TCP       | mono-thread         |
-| serveur_multi      | TCP       | multi-thread + FIFO |
-| serveur_mono_http  | HTTP 1.1  | mono-thread         |
-| serveur_multi_http | HTTP 1.1  | multi-thread + FIFO |
+| Serveur              | Protocole | Architecture        |
+| -------------------- | --------- | ------------------- |
+| `serveur_mono`       | TCP       | Mono-thread         |
+| `serveur_multi`      | TCP       | Multi-thread + FIFO |
+| `serveur_mono_http`  | HTTP 1.1  | Mono-thread         |
+| `serveur_multi_http` | HTTP 1.1  | Multi-thread + FIFO |
 
-Fonctionnalités clés :
+Fonctionnalités incluses :
 
+✔ Multi-threading (pthread)
 ✔ Queue FIFO thread-safe
-✔ Multi-thread performant (workers + dispatcher)
-✔ HTTP parser minimaliste robuste
-✔ Benchmarks Python avancés
-✔ Dashboard interactif Plotly
-✔ UML + Diagrammes Mermaid
-✔ CI/CD complet GitHub Actions
+✔ HTTP router minimal
+✔ Benchmarks Python (latence, throughput, CPU, mémoire)
+✔ UML + Mermaid
+✔ CI/CD GitHub complet
+✔ Pipeline DevOps automatique
+✔ PPTX & PDF auto-générés
 
 ---
 
 ## 🇬🇧 English Summary
 
-This project provides **4 high-performance network servers** based on:
+This project provides **4 high-performance network servers** using POSIX sockets:
 
-✔ POSIX sockets
 ✔ Multi-thread worker pool
 ✔ Thread-safe FIFO queue
-✔ Minimal HTTP 1.1 parser
-✔ Full benchmarking suite
-✔ Automated DevOps pipeline & CI/CD
+✔ Minimal HTTP 1.1 router
+✔ Python benchmark suite
+✔ Full DevOps automation
 
 ---
 
-# 🧠 Diagrams Mermaid intégrés
+# 🧠 Mermaid Diagrams
 
-## 1) Architecture Globale
+## Architecture Globale
 
 ```mermaid
 flowchart LR
@@ -110,42 +109,53 @@ flowchart LR
     G --> H["send()"]
 ```
 
----
-
-## 2) Queue FIFO Thread-Safe
+## Queue FIFO
 
 ```mermaid
 classDiagram
     class queue_t {
-        queue_node_t* head
-        queue_node_t* tail
-        pthread_mutex_t mutex
-        pthread_cond_t not_empty
-        pthread_cond_t not_full
-        size_t size
-        size_t size_max
-        +push(void*)
-        +void* pop()
+        +push()
+        +pop()
+        +destroy()
+        size
+        size_max
     }
-
     class queue_node_t {
-        void* data
-        queue_node_t* next
+        data
+        next
     }
-
     queue_t --> queue_node_t
+```
+
+## Dispatcher & Workers
+
+```mermaid
+sequenceDiagram
+    Client->>Dispatcher: accept()
+    Dispatcher->>Queue: push(fd)
+    Queue->>Worker: pop(fd)
+    Worker->>Client: send()
 ```
 
 ---
 
 # 📊 Benchmarks
 
-Auto-générés par les scripts Python :
+### Throughput
 
-![Throughput](python/figures/1-throughput.png)
-![Latency P99](python/figures/2-latency_p99.png)
-![CPU](python/figures/3-cpu.png)
-![Memory](python/figures/4-memory.png)
+![tput](python/figures/1-throughput.png)
+
+### Latence P99
+
+![latency](python/figures/2-latency_p99.png)
+
+### CPU
+
+![cpu](python/figures/3-cpu.png)
+
+### Memory
+
+![mem](python/figures/4-memory.png)
 
 ---
 
@@ -153,8 +163,8 @@ Auto-générés par les scripts Python :
 
 ```bash
 sudo apt install build-essential python3 python3-venv python3-pip
-git clone https://github.com/WalidBenTouhami/server_project.git
-cd server_project
+git clone https://github.com/WalidBenTouhami/SERVER_BENCH.git
+cd SERVER_BENCH
 make -j$(nproc)
 ```
 
@@ -184,12 +194,22 @@ make debug
 
 # 📡 API HTTP
 
-| Route    | Description   |
-| -------- | ------------- |
-| `/`      | Accueil       |
-| `/hello` | JSON          |
-| `/time`  | Horodatage    |
-| `/stats` | Stats workers |
+| Route    | Description  |
+| -------- | ------------ |
+| `/`      | Accueil      |
+| `/hello` | JSON         |
+| `/time`  | Timestamp    |
+| `/stats` | Statistiques |
+
+Example:
+
+```json
+{
+  "msg": "Hello from HTTP server",
+  "requests": 128,
+  "worker": 3
+}
+```
 
 ---
 
@@ -209,54 +229,35 @@ src/
 
 # 🚀 Pipeline DevOps complet
 
-Pipeline interactif :
+### Exécution globale :
 
 ```bash
 ./scripts/run_interactive.sh
 ```
 
-Il réalise automatiquement :
+Il exécute automatiquement :
 
 ✔ Génération HTTP
-✔ Compilation optimisée O3 + LTO
-✔ UML Mermaid + PlantUML
-✔ PPTX + PDF + Reveal.js
-✔ Stress-tests
+✔ Build C (O3 + LTO)
+✔ Génération UML
+✔ Génération PPTX + PDF
+✔ Démarrage serveurs
+✔ Tests `/`, `/hello`, `/time`, `/stats`
+✔ Stress tests TCP/HTTP
 ✔ Benchmarks extrêmes
-✔ Monitoring CPU/mémoire
-✔ CI/CD GitHub Actions
-✔ Kill multi-services propre
-
----
-
-# 🔧 Intégration CI/CD — Workflows GitHub
-
-Les workflows sont fournis dans :
-
-```
-.github/workflows/
-├── build.yml
-├── cppcheck.yml
-├── codeql.yml
-└── benchmarks.yml
-```
-
-Pour installer automatiquement :
-
-```bash
-python3 install_ci_cd.py
-```
+✔ Monitoring CPU/RAM
+✔ Kill propre multi-thread
 
 ---
 
 # 👤 Auteurs
 
-| Auteur             | Rôle                    | Expertise                |
-| ------------------ | ----------------------- | ------------------------ |
-| Walid Ben Touhami  | DevOps, Multi-threading | High-performance systems |
-| Yassin Ben Aoun    | HTTP parsing            | Network protocols        |
-| Ghada Sakouhi      | FIFO Queue, UML         | Software architecture    |
-| Islem Ben Chaabene | TCP mono-thread         | Systems programming      |
+| Auteur                 | Rôle                                | Expertise                |
+| ---------------------- | ----------------------------------- | ------------------------ |
+| **Walid Ben Touhami**  | DevOps, Multi-threading, Benchmarks | High-performance systems |
+| **Yassin Ben Aoun**    | HTTP parser                         | Protocol engineering     |
+| **Ghada Sakouhi**      | FIFO queue, UML                     | Software architecture    |
+| **Islem Ben Chaabene** | TCP mono-thread                     | POSIX networking         |
 
 ---
 
@@ -267,5 +268,4 @@ MIT License — Academic Use Only
 ```
 
 ---
-
 
