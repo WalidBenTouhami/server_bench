@@ -32,6 +32,7 @@
 <img src="https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/python/figures/THROUGHPUT_LIVE.png" width="350"/>
 
 
+
 **Documentation en ligne** → https://walidbentouhami.github.io/SERVER_BENCH/
 
 ---
