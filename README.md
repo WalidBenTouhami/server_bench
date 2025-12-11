@@ -14,8 +14,6 @@
 
 ---
 
-## SERVER_BENCH – Comparaison mono-thread vs multi-thread en C (pthread)
-
 ## 🔧 Badges GitHub Actions (CI/CD)
 
 | Workflow        | Status |
@@ -31,26 +29,25 @@
 
 <img src="https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/python/figures/THROUGHPUT_LIVE.png" width="350"/>
 
-
-
-**Documentation en ligne** → https://walidbentouhami.github.io/SERVER_BENCH/
+**Documentation en ligne** → <https://walidbentouhami.github.io/SERVER_BENCH/>
 
 ---
 
 ## 📚 Table des matières
 
-* [🎥 GIF Démonstrations](#-gif-démonstrations)
-* [📦 Projet — Version FR/EN](#-projet--version-fren)
-* [🧠 Mermaid Diagrams](#-mermaid-diagrams)
-* [📊 Benchmarks](#-benchmarks)
-* [🛠 Installation](#-installation)
-* [⚙ Exécution](#-exécution)
-* [🧪 Tests & Validation](#-tests--validation)
-* [📡 API HTTP](#-api-http)
-* [📂 Architecture du projet](#-architecture-du-projet)
-* [🚀 Pipeline DevOps complet](#-pipeline-devops-complet)
-* [👤 Auteurs](#-auteurs)
-* [📜 Licence](#-licence)
+* [🎥 GIF Démonstrations](#gif-démonstrations)
+* [📦 Projet — Version FR/EN](#projet-version-fren)
+* [🧠 Mermaid Diagrams](#mermaid-diagrams)
+* [📊 Benchmarks](#benchmarks)
+* [🛠 Installation](#installation)
+* [⚙ Exécution](#exécution)
+* [🧪 Tests & Validation](#tests-validation)
+* [🚀 Optimisations Appliquées](#optimisations-appliquées)
+* [📡 API HTTP](#api-http)
+* [📂 Architecture du projet](#architecture-du-projet)
+* [🚀 Pipeline DevOps complet](#pipeline-devops-complet)
+* [👤 Auteurs](#auteurs)
+* [📜 Licence](#licence)
 
 ---
 
@@ -108,7 +105,7 @@ This project provides **4 high-performance network servers** using POSIX sockets
 
 ## 🧠 Mermaid Diagrams
 
-## Architecture Globale
+### Architecture Globale
 
 ```mermaid
 flowchart LR
@@ -123,7 +120,7 @@ flowchart LR
     G --> H["send()"]
 ```
 
-## Queue FIFO
+### Queue FIFO
 
 ```mermaid
 classDiagram
@@ -141,7 +138,7 @@ classDiagram
     queue_t --> queue_node_t
 ```
 
-## Dispatcher & Workers
+### Dispatcher & Workers
 
 ```mermaid
 sequenceDiagram
