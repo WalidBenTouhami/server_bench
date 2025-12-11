@@ -38,7 +38,7 @@ jobs:
           fi
           
           # Check for common markdown issues
-          echo "Verifying markdown syntax..."
+          echo "Verifying markdown files..."
           
           # Verify docs directory markdown files
           if [ -d docs ]; then
@@ -75,9 +75,15 @@ jobs:
         run: |
           mkdir -p public
           if [ -d docs ]; then
-            cp -r docs/* public/ 2>/dev/null || true
+            # Copy docs directory contents (using . to handle empty directories)
+            if [ "$(ls -A docs)" ]; then
+              cp -r docs/* public/ 2>/dev/null || true
+            fi
           fi
-          cp README.md public/README.md 2>/dev/null || true
+          # Copy README.md if it exists
+          if [ -f README.md ]; then
+            cp README.md public/README.md
+          fi
 
       - name: Verify prepared docs
         run: |
