@@ -14,11 +14,9 @@
 
 ---
 
-# 🔧 Badges GitHub Actions (CI/CD)
-
-# SERVER_BENCH – Comparaison mono-thread vs multi-thread (C + pthread)
-
 # SERVER_BENCH – Comparaison mono-thread vs multi-thread en C (pthread)
+
+## 🔧 Badges GitHub Actions (CI/CD)
 
 ![Build & Tests](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Build%20&%20Test/badge.svg)
 ![Cppcheck](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Cppcheck%20Analysis/badge.svg)
@@ -297,4 +295,3 @@ MIT License — Academic Use Only
 ```
 
 ---
-
