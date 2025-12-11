@@ -1,13 +1,12 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-#include <signal.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/time.h>
-#include <errno.h>
 
 #include "http.h"
 
@@ -15,47 +14,23 @@
 #define BACKLOG   32
 #define BUF_SIZE  4096
 
-/*-----------------------------------------------------------
- *  Statistiques serveur (mono-thread → pas besoin de mutex)
- *----------------------------------------------------------*/
-static unsigned long total_requests  = 0;
-static unsigned long hello_requests  = 0;
-static unsigned long not_found_count = 0;
+/* Statistiques simples (non concurrentielles car mono-thread) */
+static unsigned long total_requests   = 0;
+static unsigned long hello_requests   = 0;
+static unsigned long not_found_count  = 0;
 
-static int server_fd = -1;
-static volatile sig_atomic_t running = 1;
-
-/*-----------------------------------------------------------
- *  SIGINT Handler — Arrêt propre via Ctrl+C
- *----------------------------------------------------------*/
-static void handle_sigint(int sig) {
-    (void)sig;
-    running = 0;
-    printf("\n[HTTP-MONO] 🔴 SIGINT reçu — arrêt en cours…\n");
-
-    if (server_fd >= 0) {
-        close(server_fd);
-        server_fd = -1;
-    }
-}
-
-/*-----------------------------------------------------------
- *  ROUTES HTTP
- *----------------------------------------------------------*/
 static void route_request(int client_fd,
                           const char *method,
                           const char *path,
-                          const char *query)
-{
-    (void)query; /* Pas encore utilisé */
+                          const char *query) {
+    (void)query; /* pas encore utilisé */
 
     total_requests++;
 
     if (strcmp(path, "/") == 0) {
-
         const char *body =
             "<html><body>"
-            "<h1>Serveur HTTP Mono-Thread</h1>"
+            "<h1>Serveur HTTP mono-thread</h1>"
             "<p>Routes disponibles :</p>"
             "<ul>"
             "<li><a href=\"/hello\">/hello</a></li>"
@@ -63,37 +38,33 @@ static void route_request(int client_fd,
             "<li><a href=\"/stats\">/stats</a></li>"
             "</ul>"
             "</body></html>";
-
         send_http_response(client_fd, "200 OK", "text/html", body, "close");
     }
     else if (strcmp(path, "/hello") == 0) {
-
         hello_requests++;
         const char *body =
             "{"
-            "\"msg\":\"Bonjour depuis le serveur HTTP mono-thread\","
+            "\"msg\":\"Bonjour depuis serveur HTTP mono-thread\","
             "\"method\":\"GET\""
             "}";
-
         send_http_response(client_fd, "200 OK", "application/json", body, "close");
     }
     else if (strcmp(path, "/time") == 0) {
-
         char body[256];
         time_t now = time(NULL);
         struct tm tm_now;
         localtime_r(&now, &tm_now);
-
         char buf[64];
         strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_now);
 
         snprintf(body, sizeof(body),
-                 "{ \"server_time\":\"%s\" }", buf);
-
+                 "{"
+                 "\"server_time\":\"%s\""
+                 "}",
+                 buf);
         send_http_response(client_fd, "200 OK", "application/json", body, "close");
     }
     else if (strcmp(path, "/stats") == 0) {
-
         char body[256];
         snprintf(body, sizeof(body),
                  "{"
@@ -102,11 +73,9 @@ static void route_request(int client_fd,
                  "\"not_found\":%lu"
                  "}",
                  total_requests, hello_requests, not_found_count);
-
         send_http_response(client_fd, "200 OK", "application/json", body, "close");
     }
     else {
-
         not_found_count++;
         send_http_response(client_fd,
                            "404 Not Found",
@@ -115,27 +84,20 @@ static void route_request(int client_fd,
                            "close");
     }
 
-    printf("[HTTP-MONO] %s %s  → total=%lu\n",
-           method, path, total_requests);
+    printf("[HTTP-MONO] %s %s (total=%lu)\n", method, path, total_requests);
 }
 
-/*-----------------------------------------------------------
- *  MAIN — Serveur HTTP Mono-thread
- *----------------------------------------------------------*/
 int main(void) {
-
-    signal(SIGINT, handle_sigint);
-
-    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    int server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd < 0) {
         perror("socket");
         return EXIT_FAILURE;
     }
 
-    /* Rebind rapide */
     int opt = 1;
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
-        perror("setsockopt");
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        perror("setsockopt SO_REUSEADDR");
+    }
 
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
@@ -155,50 +117,47 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    printf("[HTTP-MONO] 🟢 Serveur HTTP mono-thread actif sur port %d\n", HTTP_PORT);
+    printf("[HTTP-MONO] Serveur HTTP mono-thread en écoute sur port %d\n", HTTP_PORT);
 
-    while (running) {
-
+    for (;;) {
         int client_fd = accept(server_fd, NULL, NULL);
-
-        if (!running) break;
-
         if (client_fd < 0) {
-            if (errno == EINTR) continue;  // accept() interrompu par SIGINT
             perror("accept");
             continue;
         }
 
-        /* Timeout lecture */
-        struct timeval tv = { .tv_sec = 5, .tv_usec = 0 };
+        /* Timeout lecture pour éviter les connexions qui bloquent */
+        struct timeval tv;
+        tv.tv_sec = 5;
+        tv.tv_usec = 0;
         setsockopt(client_fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 
-        char buffer[BUF_SIZE];
-        ssize_t n = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+        for (;;) {
+            char buffer[BUF_SIZE];
+            ssize_t n = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+            if (n <= 0) {
+                break; /* fin de connexion ou timeout */
+            }
+            buffer[n] = '\0';
 
-        if (n <= 0) {
-            close(client_fd);
-            continue;
+            char method[16] = {0};
+            char path[256]  = {0};
+            char query[256] = {0};
+
+            parse_http_request(buffer, method, path, query);
+            route_request(client_fd, method, path, query);
+
+            /* Ici, on ferme après une requête.
+             * Pour un vrai keep-alive, on pourrait garder
+             * la connexion ouverte si l'en-tête "Connection: keep-alive"
+             * est présent, mais ce n'est pas nécessaire pour le projet.
+             */
+            break;
         }
 
-        buffer[n] = '\0';
-
-        char method[16] = {0};
-        char path[256]  = {0};
-        char query[256] = {0};
-
-        parse_http_request(buffer, method, path, query);
-
-        route_request(client_fd, method, path, query);
-
-        /* Fermeture obligatoire car nous utilisons Connection: close */
         close(client_fd);
     }
 
-    printf("[HTTP-MONO] 🟡 Serveur HTTP arrêté proprement.\n");
-
-    if (server_fd >= 0)
-        close(server_fd);
-
+    close(server_fd);
     return EXIT_SUCCESS;
 }
