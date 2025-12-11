@@ -39,8 +39,10 @@ jobs:
           
           # Check for common markdown issues
           echo "Verifying markdown syntax..."
-          for file in $(find docs -name "*.md" -type f 2>/dev/null) README.md; do
-            if [ -f "$file" ]; then
+          
+          # Verify docs directory markdown files
+          if [ -d docs ]; then
+            find docs -name "*.md" -type f -print0 | while IFS= read -r -d '' file; do
               # Check file is not empty
               if [ ! -s "$file" ]; then
                 echo "⚠️  Warning: $file is empty"
@@ -50,8 +52,19 @@ jobs:
                 echo "⚠️  Warning: $file may have encoding issues"
               fi
               echo "✓ Verified: $file"
+            done
+          fi
+          
+          # Verify README.md separately
+          if [ -f README.md ]; then
+            if [ ! -s README.md ]; then
+              echo "⚠️  Warning: README.md is empty"
             fi
-          done
+            if ! file README.md | grep -q "UTF-8\|ASCII"; then
+              echo "⚠️  Warning: README.md may have encoding issues"
+            fi
+            echo "✓ Verified: README.md"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
