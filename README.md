@@ -15,17 +15,6 @@
 
 ---
 
-# 🔧 Badges GitHub Actions (CI/CD)
-
-| Workflow                                 | Badge                                                                                                           |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Build & Test (Make + GCC + Valgrind)** | ![Build](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/build.yml?style=flat-square)       |
-| **Static Analysis (Cppcheck)**           | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/cppcheck.yml?style=flat-square) |
-| **CodeQL Security Scan**                 | ![CodeQL](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/codeql.yml?style=flat-square)     |
-| **Python Benchmarks CI**                 | ![Python](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/benchmarks.yml?style=flat-square) |
-
----
-
 # 📚 Table des matières automatique
 
 * [🚀 Serveur TCP & HTTP Hautes Performances — C/POSIX](#-serveur-tcp--http-hautes-performances--cposix)
@@ -113,15 +102,25 @@ Key features:
 
 ```mermaid
 flowchart LR
-    A[Client 1..N] --> B(accept())
-    B --> C{Queue FIFO}
-    C -->|push| D[Worker 1]
-    C -->|push| E[Worker 2]
-    C -->|push| F[Worker N]
-    D --> G((Traitement))
+    classDef client fill:#0af,color:#fff,stroke:#036,stroke-width:2px;
+    classDef accept fill:#09f,color:#fff,stroke:#036,stroke-width:2px;
+    classDef queue fill:#f90,color:#000,stroke:#630,stroke-width:2px;
+    classDef worker fill:#6c0,color:#fff,stroke:#030,stroke-width:2px;
+    classDef treat fill:#c0c,color:#fff,stroke:#505,stroke-width:2px;
+    classDef resp fill:#555,color:#fff,stroke:#222,stroke-width:2px;
+
+    A[Clients 1..N]:::client --> B[accept()]:::accept
+    B --> C["Queue FIFO<br/>(Mutex + CondVar)"]:::queue
+
+    C --> D[Worker 1]:::worker
+    C --> E[Worker 2]:::worker
+    C --> F[Worker N]:::worker
+
+    D --> G((Traitement<br/>CPU-bound)):::treat
     E --> G
     F --> G
-    G --> H[send() Réponse]
+
+    G --> H[send()<br/>Réponse]:::resp
 ```
 
 ---
@@ -204,8 +203,6 @@ sequenceDiagram
 ---
 
 # 🛠 Installation
-
-(Section identique FR/EN)
 
 ```bash
 sudo apt install build-essential python3 python3-venv python3-pip
