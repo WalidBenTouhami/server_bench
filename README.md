@@ -18,14 +18,20 @@
 
 ## 🔧 Badges GitHub Actions (CI/CD)
 
-![Build & Tests](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Build%20&%20Test/badge.svg)
-![Cppcheck](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Cppcheck%20Analysis/badge.svg)
-![CodeQL](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/CodeQL%20Security%20Scan/badge.svg)
-![Benchmarks](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Benchmarks/badge.svg)
-![Deploy Docs](https://github.com/WalidBenTouhami/SERVER_BENCH/workflows/Deploy%20Docs/badge.svg)
+# 🛠 Badges CI/CD – Advanced
 
-**Performance actuelle (mise à jour automatique à chaque push) :**  
-![Throughput](https://img.shields.io/badge/throughput-312%20req/s-brightgreen)
+| Workflow | Status |
+|---------|--------|
+| Build & Tests | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main&style=flat-square) |
+| Cppcheck | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main&style=flat-square) |
+| CodeQL | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main&style=flat-square) |
+| Benchmarks | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main&style=flat-square) |
+| Deploy Docs | ![Docs](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/deploy_docs.yml?branch=main&style=flat-square) |
+
+🔥 Throughput actuel :  
+![TP](docs/badges/throughput.svg)
+
+
 
 **Documentation en ligne** → https://walidbentouhami.github.io/SERVER_BENCH/
 
