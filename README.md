@@ -102,25 +102,25 @@ Key features:
 
 ```mermaid
 flowchart LR
-    classDef client fill:#0af,color:#fff,stroke:#036,stroke-width:2px;
+    classDef client fill:#0af,color:#fff,stroke:#036,stroke-width: 2px;
     classDef accept fill:#09f,color:#fff,stroke:#036,stroke-width:2px;
     classDef queue fill:#f90,color:#000,stroke:#630,stroke-width:2px;
     classDef worker fill:#6c0,color:#fff,stroke:#030,stroke-width:2px;
     classDef treat fill:#c0c,color:#fff,stroke:#505,stroke-width:2px;
     classDef resp fill:#555,color:#fff,stroke:#222,stroke-width:2px;
 
-    A["Clients 1.. N"]::: client --> B["accept()"]:::accept
-    B --> C["Queue FIFO<br/>(Mutex + CondVar)"]::: queue
+    A["Clients 1..  N"]:::client --> B["accept()"]:::accept
+    B --> C["Queue FIFO\n(Mutex + CondVar)"]:::queue
 
     C --> D["Worker 1"]:::worker
-    C --> E["Worker 2"]::: worker
-    C --> F["Worker N"]:::worker
+    C --> E["Worker 2"]:::worker
+    C --> F["Worker N"]::: worker
 
-    D --> G("Traitement<br/>CPU-bound"):::treat
+    D --> G["Traitement\nCPU-bound"]:::treat
     E --> G
     F --> G
 
-    G --> H["send()<br/>Réponse"]:::resp
+    G --> H["send()\nRéponse"]:::resp
 ```
 
 ---
