@@ -30,9 +30,14 @@ jobs:
       - name: Generate hashes
         id: hash
         run: |
-          cd bin
-          HASHES=$(sha256sum * | base64 -w0)
-          echo "hashes=$HASHES" >> "$GITHUB_OUTPUT"
+          if [ -d bin ] && [ "$(ls -A bin)" ]; then
+            cd bin
+            HASHES=$(sha256sum * | base64 -w0)
+            echo "hashes=$HASHES" >> "$GITHUB_OUTPUT"
+          else
+            echo "No binaries found in bin directory"
+            exit 1
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

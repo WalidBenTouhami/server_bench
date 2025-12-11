@@ -37,4 +37,7 @@ jobs:
           fi
 
       - name: Run pip-audit
-        run: pip-audit --ignore-vuln PYSEC-2022-43012 || true
+        run: |
+          # Run pip-audit on installed packages
+          # Note: Some false positives may be reported for packages not actually used
+          pip-audit || echo "pip-audit found issues or completed"
