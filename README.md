@@ -29,7 +29,7 @@
 
 <img src="https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/python/figures/1-throughput.png" width="350"/>
 
-**Documentation en ligne** → <https://walidbentouhami.github.io/SERVER_BENCH/>
+**Documentation en ligne** → <https://WalidBenTouhami.github.io/SERVER_BENCH/>
 
 ---
 
