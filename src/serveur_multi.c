@@ -205,9 +205,4 @@ int main(void) {
     printf("[MULTI] 🟡 Serveur multi-thread arrêté proprement.\n");
 
     return 0;
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> fd8c599 (Update)

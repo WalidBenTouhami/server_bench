@@ -43,6 +43,7 @@ else ifeq ($(MODE),debug)
     OPT_FLAGS  := -O0
     SAN_FLAGS  := -g -fsanitize=address,undefined -DDEBUG
     CFLAGS     := $(BASE_CFLAGS) $(OPT_FLAGS) $(SAN_FLAGS)
+    LDFLAGS    += $(SAN_FLAGS)
     BUILD_TAG  := [DEBUG + ASan + UBSan]
 else
     $(error MODE doit être 'release' ou 'debug')

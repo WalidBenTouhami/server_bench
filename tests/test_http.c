@@ -4,28 +4,32 @@
 #include <stdio.h>
 
 void test_parse_simple() {
-    http_request_t req;
+    char method[256];
+    char path[256];
+    char query[256];
 
     const char *raw =
         "GET /hello?name=walid HTTP/1.1\r\n"
         "Host: localhost\r\n"
         "\r\n";
 
-    assert(parse_http_request(raw, &req) == 0);
-    assert(strcmp(req.method, "GET") == 0);
-    assert(strcmp(req.path, "/hello") == 0);
-    assert(strcmp(req.query, "name=walid") == 0);
+    parse_http_request(raw, method, path, query);
+    assert(strcmp(method, "GET") == 0);
+    assert(strcmp(path, "/hello") == 0);
+    assert(strcmp(query, "name=walid") == 0);
 }
 
 void test_parse_no_query() {
-    http_request_t req;
+    char method[256];
+    char path[256];
+    char query[256];
 
     const char *raw = "POST /api HTTP/1.1\r\n\r\n";
 
-    assert(parse_http_request(raw, &req) == 0);
-    assert(strcmp(req.method, "POST") == 0);
-    assert(strcmp(req.path, "/api") == 0);
-    assert(strcmp(req.query, "") == 0);
+    parse_http_request(raw, method, path, query);
+    assert(strcmp(method, "POST") == 0);
+    assert(strcmp(path, "/api") == 0);
+    assert(strcmp(query, "") == 0);
 }
 
 int main() {
