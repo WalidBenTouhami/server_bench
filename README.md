@@ -14,14 +14,14 @@
 
 ---
 
-# 🔧 Badges GitHub Actions CI/CD
+# 🔧 **Badges GitHub Actions CI/CD (Advanced)**
 
 | Workflow                                 | Badge                                                                                                                                         |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Build & Test (GCC + Make + Valgrind)** | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/build.yml?branch=main\&style=flat-square)       |
 | **Static Analysis (Cppcheck)**           | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/cppcheck.yml?branch=main\&style=flat-square) |
 | **CodeQL Security Scan**                 | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/codeql.yml?branch=main\&style=flat-square)     |
-| **Python Benchmarks CI**                 | ![Python](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/benchmarks.yml?branch=main\&style=flat-square) |
+| **Python Benchmarks CI**                 | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_project/benchmarks.yml?branch=main\&style=flat-square)  |
 
 ---
 
@@ -37,14 +37,13 @@
 * [📡 API HTTP](#-api-http)
 * [📂 Architecture du projet](#-architecture-du-projet)
 * [🚀 Pipeline DevOps complet](#-pipeline-devops-complet)
+* [🔧 Intégration CI/CD — Workflows GitHub](#-intégration-cicd--workflows-github)
 * [👤 Auteurs](#-auteurs)
 * [📜 Licence](#-licence)
 
 ---
 
 # 🎥 GIF Démonstrations
-
-
 
 ### Multi-thread server execution
 
@@ -60,14 +59,7 @@
 
 ## 🇫🇷 Version Française
 
-Ce projet implémente **4 serveurs haute performance** basés sur :
-
-* Sockets POSIX bas niveau
-* Multi-threading (pthreads)
-* Queue FIFO thread-safe
-* HTTP parser minimaliste
-* Benchmarks avancés Python
-* Automatisation complète (Makefile, scripts, DevOps)
+Ce projet implémente **4 serveurs réseau haute performance** :
 
 | Serveur            | Protocole | Architecture        |
 | ------------------ | --------- | ------------------- |
@@ -76,50 +68,51 @@ Ce projet implémente **4 serveurs haute performance** basés sur :
 | serveur_mono_http  | HTTP 1.1  | mono-thread         |
 | serveur_multi_http | HTTP 1.1  | multi-thread + FIFO |
 
+Fonctionnalités clés :
+
+✔ Queue FIFO thread-safe
+✔ Multi-thread performant (workers + dispatcher)
+✔ HTTP parser minimaliste robuste
+✔ Benchmarks Python avancés
+✔ Dashboard interactif Plotly
+✔ UML + Diagrammes Mermaid
+✔ CI/CD complet GitHub Actions
+
 ---
 
 ## 🇬🇧 English Summary
 
-This project provides **4 high-performance network servers** using:
+This project provides **4 high-performance network servers** based on:
 
-* POSIX low-level sockets
-* Multi-threaded worker pool
-* Thread-safe FIFO queue
-* Minimal HTTP 1.1 router
-* Python benchmark suite
-* Full DevOps automation
+✔ POSIX sockets
+✔ Multi-thread worker pool
+✔ Thread-safe FIFO queue
+✔ Minimal HTTP 1.1 parser
+✔ Full benchmarking suite
+✔ Automated DevOps pipeline & CI/CD
 
 ---
 
 # 🧠 Diagrams Mermaid intégrés
 
----
-
-## 1) **Architecture Globale**
+## 1) Architecture Globale
 
 ```mermaid
 flowchart LR
-    classDef client fill:#0af,color:#fff;
-    classDef accept fill:#09f,color:#fff;
-    classDef queue fill:#f90,color:#000;
-    classDef worker fill:#6c0,color:#fff;
-    classDef treat fill:#c0c,color:#fff;
-    classDef resp fill:#555,color:#fff;
-
-    A["Clients"]:::client --> B["accept()"]:::accept
-    B --> C["Queue FIFO<br/>(mutex + condvar)"]:::queue
-    C --> D["Worker 1"]:::worker
-    C --> E["Worker 2"]:::worker
-    C --> F["Worker N"]:::worker
-    D --> G["Traitement"]:::treat
+    A["Clients"] --> B["accept()"]
+    B --> C["Queue FIFO (mutex + condvar)"]
+    C --> D["Worker 1"]
+    C --> E["Worker 2"]
+    C --> F["Worker N"]
+    D --> G["Traitement"]
     E --> G
     F --> G
-    G --> H["send()"]:::resp
+    G --> H["send()"]
 ```
 
 ---
 
-## 2) **Queue FIFO Thread-Safe**
+## 2) Queue FIFO Thread-Safe
 
 ```mermaid
 classDiagram
@@ -133,7 +126,6 @@ classDiagram
         size_t size_max
         +push(void*)
         +void* pop()
-        +destroy()
     }
 
     class queue_node_t {
@@ -146,30 +138,12 @@ classDiagram
 
 ---
 
-## 3) **Modèle de Threads — Dispatcher & Workers**
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Dispatcher
-    participant Queue
-    participant Worker
-
-    Client->>Dispatcher: accept()
-    Dispatcher->>Queue: push(fd)
-    Queue->>Worker: pop(fd)
-    Worker->>Worker: traitement_lourd()
-    Worker->>Client: send()
-```
-
----
-
 # 📊 Benchmarks
 
-Les figures sont auto-générées :
+Auto-générés par les scripts Python :
 
 ![Throughput](python/figures/1-throughput.png)
-![Latency](python/figures/2-latency_p99.png)
+![Latency P99](python/figures/2-latency_p99.png)
 ![CPU](python/figures/3-cpu.png)
 ![Memory](python/figures/4-memory.png)
 
@@ -210,22 +184,12 @@ make debug
 
 # 📡 API HTTP
 
-| Route    | Description       |
-| -------- | ----------------- |
-| `/`      | Accueil           |
-| `/hello` | JSON response     |
-| `/time`  | Timestamp         |
-| `/stats` | Worker statistics |
-
-Exemple :
-
-```json
-{
-  "msg": "Hello from HTTP server",
-  "requests": 128,
-  "worker": 3
-}
-```
+| Route    | Description   |
+| -------- | ------------- |
+| `/`      | Accueil       |
+| `/hello` | JSON          |
+| `/time`  | Horodatage    |
+| `/stats` | Stats workers |
 
 ---
 
@@ -245,36 +209,54 @@ src/
 
 # 🚀 Pipeline DevOps complet
 
-Pipeline exécuté via :
+Pipeline interactif :
 
 ```bash
 ./scripts/run_interactive.sh
 ```
 
-Ce pipeline réalise :
+Il réalise automatiquement :
 
-* Vérification & génération HTTP
-* Build C (optimisations O3 + LTO)
-* Génération UML (PlantUML → SVG + injection README)
-* Génération PPTX + PDF
-* Démarrage automatique des serveurs
-* Tests HTTP (curl)
-* Stress-tests TCP/HTTP
-* Benchmarks extrêmes JSON/CSV/PNG/HTML
-* Monitoring CPU/mémoire
-* Kill propre multi-threads
-* Exécution CI/CD GitHub Actions
+✔ Génération HTTP
+✔ Compilation optimisée O3 + LTO
+✔ UML Mermaid + PlantUML
+✔ PPTX + PDF + Reveal.js
+✔ Stress-tests
+✔ Benchmarks extrêmes
+✔ Monitoring CPU/mémoire
+✔ CI/CD GitHub Actions
+✔ Kill multi-services propre
+
+---
+
+# 🔧 Intégration CI/CD — Workflows GitHub
+
+Les workflows sont fournis dans :
+
+```
+.github/workflows/
+├── build.yml
+├── cppcheck.yml
+├── codeql.yml
+└── benchmarks.yml
+```
+
+Pour installer automatiquement :
+
+```bash
+python3 install_ci_cd.py
+```
 
 ---
 
 # 👤 Auteurs
 
-| Auteur                 | Rôle                                | Expertise                |
-| ---------------------- | ----------------------------------- | ------------------------ |
-| **Walid Ben Touhami**  | DevOps, Multi-threading, Benchmarks | High-performance systems |
-| **Yassin Ben Aoun**    | HTTP parser                         | Protocol engineering     |
-| **Ghada Sakouhi**      | FIFO Queue, UML                     | Software architecture    |
-| **Islem Ben Chaabene** | TCP mono-thread                     | POSIX networking         |
+| Auteur             | Rôle                    | Expertise                |
+| ------------------ | ----------------------- | ------------------------ |
+| Walid Ben Touhami  | DevOps, Multi-threading | High-performance systems |
+| Yassin Ben Aoun    | HTTP parsing            | Network protocols        |
+| Ghada Sakouhi      | FIFO Queue, UML         | Software architecture    |
+| Islem Ben Chaabene | TCP mono-thread         | Systems programming      |
 
 ---
 
