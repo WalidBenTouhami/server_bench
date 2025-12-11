@@ -30,9 +30,7 @@ reportlab
 websockets 
 watchdog
 
-firefox
-xorg
-ubuntu-desktop
+
 
 
 
