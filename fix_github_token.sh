@@ -1,27 +1,38 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ============================================================
-#  fix_github_token.sh
+#  fix_github_token.sh - Optimized version
 #  Configure un nouveau token GitHub avec permissions WORKFLOW
 #  Automatisation complète — Walid Ben Touhami
 # ============================================================
 
-set -e
+set -euo pipefail
 
-REPO_URL="https://github.com/WalidBenTouhami/SERVER_BENCH.git"
+# Unused variable removed per shellcheck warning
+# REPO_URL can be derived from git remote if needed
 WORKFLOW_TEST=".github/workflows/validate.yml"
 
-echo "============================================================"
+readonly GREEN='\033[0;32m'
+readonly RED='\033[0;31m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m'
+
+log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
+
+echo "════════════════════════════════════════════════════════════"
 echo " 🚀 Script de réparation GitHub — Token avec scope WORKFLOW"
-echo "============================================================"
+echo "════════════════════════════════════════════════════════════"
 echo ""
 
 # ------------------------------------------------------------
 # 1) Demander à l'utilisateur son nouveau token GitHub
 # ------------------------------------------------------------
-read -sp "👉 Entrer ton nouveau token GitHub (PAT) : " PAT
+read -rsp "👉 Entrer ton nouveau token GitHub (PAT) : " PAT
 echo ""
 if [ -z "$PAT" ]; then
-    echo "❌ Aucun token saisi. Abandon."
+    log_error "Aucun token saisi. Abandon."
     exit 1
 fi
 
@@ -95,7 +106,7 @@ echo "📝 Création d'un workflow de test (${WORKFLOW_TEST})..."
 
 mkdir -p .github/workflows
 
-cat > $WORKFLOW_TEST <<EOF
+cat > "$WORKFLOW_TEST" <<EOF
 name: Validate Token Workflow
 on: [push]
 jobs:
@@ -114,19 +125,20 @@ echo ""
 # ------------------------------------------------------------
 # 7) Commit + push pour valider
 # ------------------------------------------------------------
-echo "🔄 Commit & Push..."
-git add $WORKFLOW_TEST
+log_info "Commit & Push..."
+git add "$WORKFLOW_TEST"
 git commit -m "Test workflow: validate token permissions" || true
 
-echo "🚀 Tentative de push..."
-git push origin main || {
-    echo "❌ PUSH REFUSÉ — Le token n'a toujours pas la permission WORKFLOW."
+log_info "Tentative de push..."
+if git push origin main; then
+    echo ""
+    echo "════════════════════════════════════════════════════════════"
+    log_info "🎉 SUCCESS — Le workflow a été accepté par GitHub !"
+    log_info "   → Le token possède bien le scope WORKFLOW."
+    echo "════════════════════════════════════════════════════════════"
+    exit 0
+else
+    log_error "PUSH REFUSÉ — Le token n'a toujours pas la permission WORKFLOW."
     exit 1
-}
-
-echo ""
-echo "============================================================"
-echo " 🎉 SUCCESS — Le workflow a été accepté par GitHub !"
-echo "     → Le token possède bien le scope WORKFLOW."
-echo "============================================================"
+fi
 
