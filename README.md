@@ -319,14 +319,23 @@ src/
 Il exécute automatiquement :
 
 ✔ Génération HTTP
+
 ✔ Build C (O3 + LTO)
+
 ✔ Génération UML
+
 ✔ Génération PPTX + PDF
+
 ✔ Démarrage serveurs
+
 ✔ Tests `/`, `/hello`, `/time`, `/stats`
+
 ✔ Stress tests TCP/HTTP
+
 ✔ Benchmarks extrêmes
+
 ✔ Monitoring CPU/RAM
+
 ✔ Kill propre multi-thread
 
 ---
