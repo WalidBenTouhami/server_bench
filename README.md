@@ -180,8 +180,14 @@ sequenceDiagram
 
 ```bash
 sudo apt install build-essential python3 python3-venv python3-pip
-git clone https://github.com/WalidBenTouhami/SERVER_BENCH.git
-cd SERVER_BENCH
+git clone https://github.com/WalidBenTouhami/server_bench.git
+cd server_bench
+source venv/bin/activate
+Makefile
+create_http_files.py
+rebuild_project.py
+setup.sh
+make clean
 make -j$(nproc)
 ```
 
@@ -196,6 +202,22 @@ make run_mono_http
 make run_multi_http
 ```
 
+## Lancer le mono-thread http :
+./bin/serveur_mono_http
+# Dans un autre terminal :
+curl -v http://127.0.0.1:8080/
+curl -v http://127.0.0.1:8080/hello
+curl -v http://127.0.0.1:8080/time
+curl -v http://127.0.0.1:8080/stats
+
+## Lancer le multi-thread :
+./bin/serveur_multi_http
+# Et tester avec curl ou ton client de benchmark Python
+curl -v http://127.0.0.1:8081/hello
+curl -v http://127.0.0.1:8081/stats
+
+
+
 ---
 
 ## 🧪 Tests & Validation
@@ -206,6 +228,14 @@ make MODE=debug all                              # Build with sanitizers
 valgrind --leak-check=full ./bin/serveur_multi  # Memory leak check
 valgrind --tool=helgrind ./bin/serveur_multi    # Thread safety check
 ```
+## ⚙ Exécution Automatique
+
+```bash
+./scripts/run_all.sh          # Démarrage automatique des 4 serveurs
+./scripts/start_all.sh        # Démarrage automatique des 4 serveurs et benchmark
+./scripts/run_interactive.sh  # Exécution intéractive
+```
+---
 
 ## 🚀 Optimisations Appliquées
 
