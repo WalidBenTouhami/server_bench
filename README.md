@@ -18,24 +18,26 @@
 
 | Workflow        | Status |
 |-----------------|--------|
-| Build & Tests   | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/build.yml?branch=main&style=flat-square) |
-| Cppcheck        | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/cppcheck.yml?branch=main&style=flat-square) |
-| CodeQL          | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/codeql.yml?branch=main&style=flat-square) |
-| Benchmarks      | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/benchmarks.yml?branch=main&style=flat-square) |
-| Deploy Docs     | ![Deploy](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/SERVER_BENCH/deploy_docs.yml?branch=main&style=flat-square) |
+| Build & Tests   | ![Build](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/build.yml?branch=main&style=flat-square) |
+| Cppcheck        | ![Cppcheck](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/cppcheck.yml?branch=main&style=flat-square) |
+| CodeQL          | ![CodeQL](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/codeql.yml?branch=main&style=flat-square) |
+| Benchmarks      | ![Bench](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/benchmarks.yml?branch=main&style=flat-square) |
+| Deploy Docs     | ![Deploy](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/deploy_docs.yml?branch=main&style=flat-square) |
 
 **Thread-Safe Proven**
-[![Thread-Safe Proven](https://img.shields.io/badge/Thread_Safe-Proven_100%25-green?style=flat-square&logo=linux)](https://github.com/WalidBenTouhami/SERVER_BENCH)
-[![Zero Memory Leaks](https://img.shields.io/badge/M904eaks-0_(Valgrind)-brightgreen?style=flat-square&logo=c)](https://github.com/WalidBenTouhami/SERVER_BENCH)
-[![Helgrind Clean](https://img.shields.io/badge/Helgrind-0_errors-blue?style=flat-square)](https://github.com/WalidBenTouhami/SERVER_BENCH)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Online-00BFFF?style=flat-square&logo=githubpages)](https://walidbentouhami.github.io/SERVER_BENCH/)
+[![Thread-Safe Proven](https://img.shields.io/badge/Thread_Safe-Proven_100%25-green?style=flat-square&logo=linux)](https://github.com/WalidBenTouhami/server_bench)
+[![Zero Memory Leaks](https://img.shields.io/badge/M904eaks-0_(Valgrind)-brightgreen?style=flat-square&logo=c)](https://github.com/WalidBenTouhami/server_bench)
+[![Helgrind Clean](https://img.shields.io/badge/Helgrind-0_errors-blue?style=flat-square)](https://github.com/WalidBenTouhami/server_bench)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Online-00BFFF?style=flat-square&logo=githubpages)](https://walidbentouhami.github.io/server_bench/)
+![Smoke Tests](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/smoke-tests.yml?branch=main&style=flat-square)
+
 
 ### 📊 Résultats en Temps Réel:
 🔥 **Throughput actuel :**  
-<img src="https://raw.githubusercontent.com/WalidBenTouhami/SERVER_BENCH/main/python/figures/1-throughput.png" width="600"/>  
+<img src="https://raw.githubusercontent.com/WalidBenTouhami/server_bench/main/python/figures/1-throughput.png" width="600"/>  
 *(Graphique statique ; généré via benchmarks Python – voir figures/ pour live updates)*
 
-**Documentation en ligne** → [https://walidbentouhami.github.io/SERVER_BENCH/](https://walidbentouhami.github.io/SERVER_BENCH/)  
+**Documentation en ligne** → [https://walidbentouhami.github.io/server_bench/](https://walidbentouhami.github.io/server_bench/)  
 *(Dashboard interactif avec résultats, graphiques et comparaison mono/multi)*
 ---
 
@@ -212,7 +214,7 @@ make run_multi
 make run_mono_http
 make run_multi_http
 ```
-
+---
 ## (smoke tests):
 
 ## Lancer le mono-thread http:
@@ -233,7 +235,7 @@ curl -v http://127.0.0.1:8080/stats
 ./bin/serveur_multi_http
 ```
 
-# Tests de bon fonctionnement multi-thread http (smoke tests) Dans un autre terminal:
+# Tests de bon fonctionnement multi-thread http Dans un autre terminal:
 ```bash
 curl -v http://127.0.0.1:8081/hello
 curl -v http://127.0.0.1:8081/stats
@@ -255,24 +257,30 @@ python3 python/client_stress_tcp.py --port 5050 --clients 1
 ./bin/serveur_multi
 ```
 
-# Tests de bon fonctionnement multi-thread http (smoke tests) Dans un autre terminal:
+# Tests de bon fonctionnement multi-thread http Dans un autre terminal:
 ```bash
 ss -ltnp | grep 5051
 python3 python/client_stress_tcp.py --port 5051 --clients 1
 ```
 
+## All-in One Smoke-Tests:
+```bash
+.github/workflows/smoke-tests.yml
+```
+---
 ## 🧪 Stress tests HTTP:
 ```bash
 python client_stress_http.py --port 8080
 python client_stress_http.py --port 8081
 ```
+---
 
 ## 🧪 Stress tests TCP:
 ```bash
 python client_stress_tcp.py --port 5050
 python client_stress_tcp.py --port 5051
 ```
-
+---
 ## 🧪 Tests & Validation:
 ```bash
 make test                                        # Run unit tests
@@ -280,12 +288,12 @@ make MODE=debug all                              # Build with sanitizers
 valgrind --leak-check=full ./bin/serveur_multi  # Memory leak check
 valgrind --tool=helgrind ./bin/serveur_multi    # Thread safety check
 ```
-
+---
 ## 🧪 Benchmarks globaux:
 ```bash
 python benchmark_extreme.py
 ```
-
+---
 ## ⚙ Exécution Automatique:
 ```bash
 ./scripts/run_all.sh          # Démarrage automatique des 4 serveurs
@@ -297,7 +305,7 @@ python benchmark_extreme.py
 ```bash
 make kill_servers
 ```
-
+---
 ## 🚀 Optimisations Appliquées:
 
 Le projet utilise des optimisations avancées pour des performances maximales :
