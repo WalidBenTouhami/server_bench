@@ -49,7 +49,7 @@ start_server() {
     
     # Check if port is available
     if command -v ss >/dev/null 2>&1; then
-        if ss -ltn | grep -q ":${port} "; then
+        if ss -ltn | grep -qE ":${port}[[:space:]]"; then
             log_error "Port $port déjà utilisé"
             return 1
         fi

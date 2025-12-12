@@ -42,20 +42,39 @@ echo "────────────────────────�
 
 cd "$PROJECT_ROOT"
 
-# Function to safely remove files
+# Function to safely remove files (supports globs)
 safe_remove() {
-    local path=$1
+    local pattern=$1
     local desc=$2
     
-    if [ $DRY_RUN -eq 1 ]; then
-        if [ -e "$path" ] || [ -L "$path" ]; then
-            log_info "[DRY-RUN] Supprimerait: $desc"
-            [ $VERBOSE -eq 1 ] && find "$path" -type f 2>/dev/null | head -5
+    # Check if pattern contains wildcards
+    if [[ "$pattern" == *"*"* ]]; then
+        # Handle glob patterns
+        local found=0
+        for path in $pattern; do
+            if [ -e "$path" ] || [ -L "$path" ]; then
+                found=1
+                if [ $DRY_RUN -eq 1 ]; then
+                    log_info "[DRY-RUN] Supprimerait: $path"
+                else
+                    rm -rf "$path" || log_warn "Échec de suppression: $path"
+                fi
+            fi
+        done
+        if [ $found -eq 1 ] && [ $DRY_RUN -eq 0 ]; then
+            log_info "Suppression: $desc"
         fi
     else
-        if [ -e "$path" ] || [ -L "$path" ]; then
-            log_info "Suppression: $desc"
-            rm -rf "$path" || log_warn "Échec de suppression: $path"
+        # Handle single file/directory
+        if [ $DRY_RUN -eq 1 ]; then
+            if [ -e "$pattern" ] || [ -L "$pattern" ]; then
+                log_info "[DRY-RUN] Supprimerait: $desc"
+            fi
+        else
+            if [ -e "$pattern" ] || [ -L "$pattern" ]; then
+                log_info "Suppression: $desc"
+                rm -rf "$pattern" || log_warn "Échec de suppression: $pattern"
+            fi
         fi
     fi
 }

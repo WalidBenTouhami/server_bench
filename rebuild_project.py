@@ -70,11 +70,13 @@ def run(cmd: List[str], cwd: Optional[Path] = None, capture: bool = False) -> No
 
 def check_prerequisites() -> None:
     """Check if required tools are available."""
+    import shutil
+    
     required = ['make', 'gcc', 'python3']
     missing = []
     
     for tool in required:
-        if not subprocess.run(['which', tool], capture_output=True).returncode == 0:
+        if not shutil.which(tool):
             missing.append(tool)
     
     if missing:

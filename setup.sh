@@ -30,7 +30,7 @@ for cmd in gcc make python3; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         MISSING_TOOLS+=("$cmd")
     else
-        VERSION=$(command $cmd --version 2>/dev/null | head -n1 || echo "version inconnue")
+        VERSION=$("$cmd" --version 2>/dev/null | head -n1 || echo "version inconnue")
         log_info "$cmd trouvé: $VERSION"
     fi
 done
