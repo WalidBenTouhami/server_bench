@@ -87,12 +87,19 @@ Ce projet implémente **4 serveurs haute performance** :
 Fonctionnalités incluses :
 
 ✔ Multi-threading (pthread)
+
 ✔ Queue FIFO thread-safe
+
 ✔ HTTP router minimal
+
 ✔ Benchmarks Python (latence, throughput, CPU, mémoire)
+
 ✔ UML + Mermaid
+
 ✔ CI/CD GitHub complet
+
 ✔ Pipeline DevOps automatique
+
 ✔ PPTX & PDF auto-générés
 
 ---
@@ -102,9 +109,13 @@ Fonctionnalités incluses :
 This project provides **4 high-performance network servers** using POSIX sockets:
 
 ✔ Multi-thread worker pool
+
 ✔ Thread-safe FIFO queue
+
 ✔ Minimal HTTP 1.1 router
+
 ✔ Python benchmark suite
+
 ✔ Full DevOps automation
 
 ---
