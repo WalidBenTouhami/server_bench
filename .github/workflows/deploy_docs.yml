@@ -6,6 +6,8 @@ on:
     paths:
       - "docs/**"
       - "README.md"
+      - "index.html"
+      - ".nojekyll"
   workflow_dispatch:
 
 permissions:
@@ -94,6 +96,16 @@ jobs:
           # Copy README.md if it exists
           if [ -f README.md ]; then
             cp README.md public/README.md
+          fi
+          # Copy index.html if it exists
+          if [ -f index.html ]; then
+            cp index.html public/index.html
+            echo "✓ Copied index.html"
+          fi
+          # Copy .nojekyll if it exists
+          if [ -f .nojekyll ]; then
+            cp .nojekyll public/.nojekyll
+            echo "✓ Copied .nojekyll"
           fi
 
       - name: Verify prepared docs
