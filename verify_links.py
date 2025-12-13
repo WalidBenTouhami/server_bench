@@ -21,6 +21,12 @@ YELLOW = '\033[1;33m'
 BLUE = '\033[0;34m'
 NC = '\033[0m'  # No Color
 
+# French accents preserved in GitHub anchor generation
+FRENCH_ACCENTS = 'àâäéèêëïîôùûüÿæœç'
+
+# Characters to strip from URLs
+URL_CLEANUP_CHARS = '.,;:)`|'
+
 class LinkVerifier:
     def __init__(self, repo_path: str):
         self.repo_path = Path(repo_path)
@@ -81,8 +87,8 @@ class LinkVerifier:
             # Now extract all HTTP/HTTPS URLs from cleaned content
             external_urls = re.findall(r'https?://[^\s\)<>"\'`]+', cleaned_content)
             for url in external_urls:
-                # Clean up URL (remove trailing punctuation and backticks)
-                url = url.rstrip('.,;:)`')
+                # Clean up URL (remove trailing punctuation)
+                url = url.rstrip(URL_CLEANUP_CHARS)
                 # Skip URLs that are just placeholders or examples with ellipsis
                 if '...' in url or url.endswith('`'):
                     continue
@@ -90,14 +96,14 @@ class LinkVerifier:
                 
             # Extract markdown anchor links from TOC
             # Include all French accents that are preserved in GitHub anchors
-            anchor_links = re.findall(r'\[.+?\]\(#([a-z0-9\-àâäéèêëïîôùûüÿæœç]+)\)', content, re.IGNORECASE)
+            anchor_links = re.findall(rf'\[.+?\]\(#([a-z0-9\-{FRENCH_ACCENTS}]+)\)', content, re.IGNORECASE)
             for anchor in anchor_links:
                 links['anchors'].add(anchor)
                 
             # Extract local URLs (127.0.0.1, localhost)
             local_urls = re.findall(r'http://(?:127\.0\.0\.1|localhost):[0-9]+[^\s\)<>"\']*', content)
             for url in local_urls:
-                url = url.rstrip('.,;:)`|')
+                url = url.rstrip(URL_CLEANUP_CHARS)
                 links['local'].add(url)
                 
         except Exception as e:
@@ -128,15 +134,13 @@ class LinkVerifier:
     def header_to_anchor(self, header: str) -> str:
         """Convert markdown header to GitHub anchor format
         GitHub preserves accents but removes emojis and special chars"""
-        # Remove emojis (Unicode emoji characters)
+        # Remove emojis (Unicode emoji range covers most emojis)
         header = re.sub(r'[\U0001F300-\U0001F9FF]', '', header)
-        # Remove other special symbols and emojis
-        header = re.sub(r'[🎥🚀🧠📊🛠🏗️🧪📈🧹🛑🤖⚙️📡📂👤📜⚡🔧]', '', header)
         # Convert to lowercase
         header = header.lower()
         # Remove special characters but KEEP accents (GitHub preserves them)
         # Keep: alphanumeric, spaces, hyphens, and accented characters
-        header = re.sub(r'[^\w\s\-àâäéèêëïîôùûüÿæœç]', '', header)
+        header = re.sub(rf'[^\w\s\-{FRENCH_ACCENTS}]', '', header)
         # Replace spaces with hyphens
         header = re.sub(r'\s+', '-', header)
         # Remove multiple consecutive hyphens
