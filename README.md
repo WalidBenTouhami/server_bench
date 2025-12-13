@@ -26,7 +26,7 @@
 
 **Thread-Safe Proven**
 [![Thread-Safe Proven](https://img.shields.io/badge/Thread_Safe-Proven_100%25-green?style=flat-square&logo=linux)](https://github.com/WalidBenTouhami/server_bench)
-[![Zero Memory Leaks](https://img.shields.io/badge/M904eaks-0_(Valgrind)-brightgreen?style=flat-square&logo=c)](https://github.com/WalidBenTouhami/server_bench)
+[![Zero Memory Leaks](https://img.shields.io/badge/Memory_Leaks-0_%28Valgrind%29-brightgreen?style=flat-square&logo=c)](https://github.com/WalidBenTouhami/server_bench)
 [![Helgrind Clean](https://img.shields.io/badge/Helgrind-0_errors-blue?style=flat-square)](https://github.com/WalidBenTouhami/server_bench)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Online-00BFFF?style=flat-square&logo=githubpages)](https://walidbentouhami.github.io/server_bench/)
 ![Smoke Tests](https://img.shields.io/github/actions/workflow/status/WalidBenTouhami/server_bench/smoke-tests.yml?branch=main&style=flat-square)
@@ -46,17 +46,17 @@
 ## 📚 Table des matières
 
 1. [🎥 GIF Démonstrations](#gif-démonstrations)
-2. [📦 Projet — Version FR/EN](#projet--version-fren)
+2. [📦 Projet — Version FR/EN](#projet-version-fren)
 3. [🧠 Mermaid Diagrams](#mermaid-diagrams)
 4. [📊 Résultats Benchmarks](#résultats-benchmarks)
-5. [🛠 Installation & Setup](#installation--setup)
-6. [🏗️ Build & Compilation](#build--compilation)
+5. [🛠 Installation & Setup](#installation-setup)
+6. [🏗️ Build & Compilation](#build-compilation)
 7. [🚀 Démarrage des Serveurs](#démarrage-des-serveurs)
-8. [🧪 Tests & Validation](#tests--validation)
+8. [🧪 Tests & Validation](#tests-validation)
    - [Smoke Tests](#smoke-tests)
    - [Stress Tests](#stress-tests)
    - [Validation Tests](#validation-tests)
-9. [📈 Benchmarks & KPI](#benchmarks--kpi)
+9. [📈 Benchmarks & KPI](#benchmarks-kpi)
    - [Benchmarks Standards](#benchmarks-standards)
    - [Benchmarks Extrêmes](#benchmarks-extrêmes)
    - [KPI de Performance](#kpi-de-performance)
@@ -568,7 +568,7 @@ xdg-open python/figures/2-latency_p99.png
 
 ### Documentation En Ligne
 
-Dashboard GitHub Pages : <https://walidbentouhami.github.io/SERVER_BENCH/>
+Dashboard GitHub Pages : <https://walidbentouhami.github.io/server_bench/>
 
 ---
 
@@ -964,7 +964,7 @@ Ouvrir une issue sur GitHub : <https://github.com/WalidBenTouhami/server_bench/i
 
 ### Documentation Complète
 
-- **GitHub Pages** : <https://walidbentouhami.github.io/SERVER_BENCH/>
+- **GitHub Pages** : <https://walidbentouhami.github.io/server_bench/>
 - **Audit Report** : `docs/AUDIT_REPORT.md`
 - **Validation Checklist** : `docs/VALIDATION_CHECKLIST.md`
 - **Cheatsheet** : `docs/cheatsheet.pdf`
